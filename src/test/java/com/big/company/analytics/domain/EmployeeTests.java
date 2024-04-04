@@ -1,6 +1,7 @@
 package com.big.company.analytics.domain;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static com.big.company.analytics.util.AssertThrows.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
@@ -27,42 +28,32 @@ public class EmployeeTests {
 
     @Test
     void shouldEmployeeFailForMissingProperties() {
+        assertThrows("Employee id is missing", NullPointerException.class,
+                () -> Employee.builder()
+                        .setFirstName("Joe")
+                        .setLastName("Doe")
+                        .setSalary(45000)
+                        .build());
 
-        Exception employeeWithoutId = assertThrowsExactly(NullPointerException.class, () -> {
-            Employee.builder()
-                    .setFirstName("Joe")
-                    .setLastName("Doe")
-                    .setSalary(45000)
-                    .build();
-        });
-        assertEquals("Employee id is missing", employeeWithoutId.getMessage());
+        assertThrows("Employee first name is missing", NullPointerException.class,
+                () -> Employee.builder()
+                        .setId(123)
+                        .setLastName("Doe")
+                        .setSalary(45000)
+                        .build());
 
-        Exception employeeWithoutFirstName = assertThrowsExactly(NullPointerException.class, () -> {
-            Employee.builder()
-                    .setId(123)
-                    .setLastName("Doe")
-                    .setSalary(45000)
-                    .build();
-        });
-        assertEquals("Employee first name is missing", employeeWithoutFirstName.getMessage());
+        assertThrows("Employee last name is missing", NullPointerException.class,
+                () -> Employee.builder()
+                        .setId(123)
+                        .setFirstName("Joe")
+                        .setSalary(45000)
+                        .build());
 
-        Exception employeeWithoutLastName = assertThrowsExactly(NullPointerException.class, () -> {
-            Employee.builder()
-                    .setId(123)
-                    .setFirstName("Joe")
-                    .setSalary(45000)
-                    .build();
-        });
-        assertEquals("Employee last name is missing", employeeWithoutLastName.getMessage());
-
-        Exception employeeWithoutSalary = assertThrowsExactly(NullPointerException.class, () -> {
-            Employee.builder()
-                    .setId(123)
-                    .setFirstName("Joe")
-                    .setLastName("Doe")
-                    .build();
-        });
-        assertEquals("Employee salary is missing", employeeWithoutSalary.getMessage());
-
+        assertThrows("Employee salary is missing", NullPointerException.class,
+                () -> Employee.builder()
+                        .setId(123)
+                        .setFirstName("Joe")
+                        .setLastName("Doe")
+                        .build());
     }
 }
