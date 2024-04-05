@@ -11,14 +11,24 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
+/**
+ * Implementation of the {@code EmployeeReport} interface that generates reports based on
+ * the hierarchy (N-tree) of employees.
+ */
 public class EmployeeHierarchyReport implements EmployeeReport {
 
     private static final int STANDARD_REPORTING_LINES_THRESHOLD = 4;
     private static final int STANDARD_MINIMUM_PERCENTAGE = 20;
     private static final int STANDARD_MAXIMUM_PERCENTAGE = 50;
 
+    /**
+     * Root node of the employee hierarchy (CEO)
+     */
     private EmployeeNode employeeHierarchy;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Integer inputEmployees(List<Employee> employees) {
         if (employees == null) throw new EmployeeReportException("Employees list should not be null");
@@ -34,6 +44,12 @@ public class EmployeeHierarchyReport implements EmployeeReport {
         }
     }
 
+    /**
+     * Handle and add unordered employees to the employee hierarchy.
+     *
+     * @param employees the list of employees to be added to the hierarchy
+     * @return the number of employees successfully added to the hierarchy
+     */
     private int addUnorderedEmployeesToHierarchy(List<Employee> employees) {
         List<Employee> iterate = employees.stream()
                 .filter(employee -> employee.getManagerId().isPresent())
@@ -51,21 +67,33 @@ public class EmployeeHierarchyReport implements EmployeeReport {
         return employees.size() - iterate.size();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void reportManagersSalaryPolicyViolation() {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void reportManagersSalaryPolicyViolation(Integer minimumPercentage, Integer maximumPercentage) {
 
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Map<Employee, Integer> reportManagersWithExcessiveReportingLines() {
         return getNodesWithDepthGreaterThan(STANDARD_REPORTING_LINES_THRESHOLD);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Map<Employee, Integer> reportManagersWithExcessiveReportingLines(Integer reportingLinesThreshold) {
         Objects.requireNonNull(reportingLinesThreshold);

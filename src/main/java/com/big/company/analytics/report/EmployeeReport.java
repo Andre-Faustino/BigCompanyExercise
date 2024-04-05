@@ -33,6 +33,7 @@ public interface EmployeeReport {
      *
      * @param minimumPercentage the minimum allowed percentage increase in salary.
      * @param maximumPercentage the maximum allowed percentage increase in salary.
+     * @throws NullPointerException if any param is null
      */
     void reportManagersSalaryPolicyViolation(Integer minimumPercentage, Integer maximumPercentage);
 
