@@ -1,8 +1,6 @@
 package com.big.company.analytics.report;
 
 import com.big.company.analytics.domain.Employee;
-import com.big.company.analytics.exception.EmployeeException;
-import com.big.company.analytics.exception.EmployeeNodeException;
 import com.big.company.analytics.exception.EmployeeReportException;
 
 import java.util.List;
