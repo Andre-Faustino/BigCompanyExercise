@@ -18,7 +18,7 @@ import java.util.List;
 public final class EmployeeDataExtractor implements FileExtractor<Employee> {
 
     private final static String DELIMITER = ",";
-    private final static Boolean HAS_HEADLER = true;
+    private final static Boolean HAS_HEADER = true;
 
     /**
      * Extracts {@code Employee} objects from a CSV file specified by path and filename.
@@ -56,7 +56,7 @@ public final class EmployeeDataExtractor implements FileExtractor<Employee> {
             String line;
             int curLine = 0;
             while ((line = br.readLine()) != null) {
-                if (HAS_HEADLER && curLine == 0) {
+                if (HAS_HEADER && curLine == 0) {
                     curLine++;
                     continue;
                 }
