@@ -17,9 +17,22 @@ import java.util.stream.Collectors;
  */
 public class EmployeeHierarchyReport implements EmployeeReport {
 
-    private static final int STANDARD_REPORTING_LINES_THRESHOLD = 4;
-    private static final int STANDARD_MINIMUM_PERCENTAGE = 20;
-    private static final int STANDARD_MAXIMUM_PERCENTAGE = 50;
+    /**
+     * Default threshold value for reporting lines be considered excessive.
+     */
+    private static final int DEFAULT_REPORTING_LINES_THRESHOLD = 4;
+
+    /**
+     * Default minimum percentage for salary policy violation.
+     * Manager salary should be a minimum percentage (20%) more than its subordinate's average salary
+     */
+    private static final int DEFAULT_MINIMUM_PERCENTAGE = 20;
+
+    /**
+     * Default maximum percentage for salary policy violation.
+     * Manager salary should NOT be a maximum percentage (50%) more than its subordinate's average salary
+     */
+    private static final int DEFAULT_MAXIMUM_PERCENTAGE = 50;
 
     /**
      * Root node of the employee hierarchy (CEO)
@@ -72,7 +85,7 @@ public class EmployeeHierarchyReport implements EmployeeReport {
      */
     @Override
     public Map<Employee, String> reportManagersSalaryPolicyViolation() {
-        return reportManagersSalaryPolicyViolation(STANDARD_MINIMUM_PERCENTAGE, STANDARD_MAXIMUM_PERCENTAGE);
+        return reportManagersSalaryPolicyViolation(DEFAULT_MINIMUM_PERCENTAGE, DEFAULT_MAXIMUM_PERCENTAGE);
     }
 
     /**
@@ -141,7 +154,7 @@ public class EmployeeHierarchyReport implements EmployeeReport {
      */
     @Override
     public Map<Employee, Integer> reportManagersWithExcessiveReportingLines() {
-        return reportManagersWithExcessiveReportingLines(STANDARD_REPORTING_LINES_THRESHOLD);
+        return reportManagersWithExcessiveReportingLines(DEFAULT_REPORTING_LINES_THRESHOLD);
     }
 
     /**
