@@ -125,7 +125,7 @@ public class EmployeeHierarchyReport implements EmployeeReport {
         return managersAndPolicyViolation;
     }
 
-    private void getNodesSubordinatesSalaryAverage(EmployeeNode node, Map<Employee, Double> result) {
+    private static void getNodesSubordinatesSalaryAverage(EmployeeNode node, Map<Employee, Double> result) {
         if (node.getSubordinates().isEmpty()) return;
         Double average = node.getSubordinates().stream()
                 .collect(Collectors.averagingInt(child -> child.getEmployee().getSalary()));
