@@ -30,10 +30,12 @@ public interface EmployeeReport {
      * <br>The criteria is that each manager should have a salary at least a minimum percentage
      * more than the average salary of its direct subordinates, but no more than the maximum percentage
      * than that average.
+     * Needs {@code List<employees>} to input reported managers.
      *
      * @param minimumPercentage the minimum allowed percentage increase in salary.
      * @param maximumPercentage the maximum allowed percentage increase in salary.
      * @throws NullPointerException if any param is null
+     * @throws EmployeeReportException if employees list is not set
      */
     void reportManagersSalaryPolicyViolation(Integer minimumPercentage, Integer maximumPercentage);
 
@@ -47,6 +49,7 @@ public interface EmployeeReport {
      * <br>The criteria is that each manager should have a salary at least a 20%
      * more than the average salary of its direct subordinates, but no more than the 50%
      * than that average.
+     * @throws EmployeeReportException if employees list is not set
      */
     void reportManagersSalaryPolicyViolation();
 
@@ -57,6 +60,7 @@ public interface EmployeeReport {
      * @param reportingLinesThreshold the maximum allowed number of reporting lines.
      * @return a map with managers and how much reporting lines higher than the threshold
      * @throws NullPointerException if {@code reportingLines} is null
+     * @throws EmployeeReportException if employees list is not set
      */
     Map<Employee, Integer> reportManagersWithExcessiveReportingLines(Integer reportingLinesThreshold);
 
@@ -65,6 +69,7 @@ public interface EmployeeReport {
      * exceeding the standard threshold of 4.
      *
      * @return a map with managers and how much reporting lines higher than 4
+     * @throws EmployeeReportException if employees list is not set
      */
     Map<Employee, Integer> reportManagersWithExcessiveReportingLines();
 }

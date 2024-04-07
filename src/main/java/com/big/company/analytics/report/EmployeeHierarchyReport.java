@@ -97,6 +97,8 @@ public class EmployeeHierarchyReport implements EmployeeReport {
     @Override
     public Map<Employee, Integer> reportManagersWithExcessiveReportingLines(Integer reportingLinesThreshold) {
         Objects.requireNonNull(reportingLinesThreshold);
+        if (employeeHierarchy == null)
+            throw new EmployeeReportException("Employees list not set, should input employees before reports call");
         return getNodesWithDepthGreaterThan(reportingLinesThreshold);
     }
 
