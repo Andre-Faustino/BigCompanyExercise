@@ -86,7 +86,7 @@ public class EmployeeHierarchyReport implements EmployeeReport {
                 .filter(employee -> {
                     if (employee.getManagerId().isEmpty()) return false;
                     for (Employee lookup : employees) {
-                        if (employee.getManagerId().get().equals(lookup.getId())) {
+                        if (employee.getManagerId().get().equals(lookup.id())) {
                             return true;
                         }
                     }
@@ -122,10 +122,10 @@ public class EmployeeHierarchyReport implements EmployeeReport {
 
         managersWithPolicyViolation.forEach((employee, violationDescr) ->
                 System.out.printf(" %d |  %s  |  %s  |  %d  |  %s  %n",
-                        employee.getId(),
-                        employee.getFirstName(),
-                        employee.getLastName(),
-                        employee.getSalary(),
+                        employee.id(),
+                        employee.firstName(),
+                        employee.lastName(),
+                        employee.salary(),
                         violationDescr));
         System.out.println();
 
@@ -140,7 +140,7 @@ public class EmployeeHierarchyReport implements EmployeeReport {
         managersAndAverage.forEach(((employee, average) -> {
             double minimumSalaryAllowed = average * (1 + ((double) minimumPercentage / 100));
             double maximumSalaryAllowed = average * (1 + ((double) maximumPercentage / 100));
-            double salary = employee.getSalary().doubleValue();
+            double salary = employee.salary().doubleValue();
 
             if (salary < minimumSalaryAllowed)
                 managersAndPolicyViolation.put(employee,
@@ -156,7 +156,7 @@ public class EmployeeHierarchyReport implements EmployeeReport {
     private static void getNodesSubordinatesSalaryAverage(EmployeeNode node, Map<Employee, Double> result) {
         if (node.getSubordinates().isEmpty()) return;
         Double average = node.getSubordinates().stream()
-                .collect(Collectors.averagingInt(child -> child.getEmployee().getSalary()));
+                .collect(Collectors.averagingInt(child -> child.getEmployee().salary()));
         result.put(node.getEmployee(), average);
 
         for (EmployeeNode subordinate : node.getSubordinates()) {
@@ -188,9 +188,9 @@ public class EmployeeHierarchyReport implements EmployeeReport {
 
         managerAndReportingLines.forEach(((employee, reportingLines) ->
                 System.out.printf(" %d |  %s  |  %s  |  %d  %n",
-                        employee.getId(),
-                        employee.getFirstName(),
-                        employee.getLastName(),
+                        employee.id(),
+                        employee.firstName(),
+                        employee.lastName(),
                         reportingLines)));
         System.out.println();
 

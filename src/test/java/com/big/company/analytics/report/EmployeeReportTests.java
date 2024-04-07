@@ -45,12 +45,7 @@ class EmployeeReportTests {
         assertThrows("Employees list should not be null", EmployeeReportException.class,
                 () -> report.inputEmployees(null));
 
-        Employee anotherCEO = Employee.builder()
-                .setId(345)
-                .setFirstName("Elon")
-                .setLastName("Musk")
-                .setSalary(250000)
-                .build();
+        Employee anotherCEO = new Employee(345, "Elon", "Musk", 250000, null);
         employees.add(anotherCEO);
 
         AssertThrows.assertThrows("Error when creating Employee Hierarchy | Employee list has more than one CEO", EmployeeReportException.class,
@@ -99,13 +94,7 @@ class EmployeeReportTests {
         Integer expectedNumberOfManagersWithReportingLinesHigherThan4 = 65;
         assertEquals(expectedNumberOfManagersWithReportingLinesHigherThan4, managers.size());
 
-        Employee mockedEmp = Employee.builder()
-                .setId(138)
-                .setFirstName("Victoria")
-                .setLastName("Roberts")
-                .setSalary(51000)
-                .setManagerId(128)
-                .build();
+        Employee mockedEmp = new Employee(138, "Victoria", "Roberts", 51000, 128);
 
         assertTrue(managers.containsKey(mockedEmp));
         assertEquals(1, managers.get(mockedEmp));

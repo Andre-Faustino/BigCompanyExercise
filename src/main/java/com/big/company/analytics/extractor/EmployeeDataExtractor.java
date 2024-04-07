@@ -26,8 +26,8 @@ public final class EmployeeDataExtractor implements FileExtractor<Employee> {
      * @param path     the path to the directory containing the CSV file
      * @param fileName the name of the CSV file
      * @return a list of {@code Employee} objects extracted from the CSV file
-     * @throws FileExtractionException   if the file is not found or cannot be loaded
-     * @throws ParseExtractionException  if any error occurs during parsing of the file content
+     * @throws FileExtractionException  if the file is not found or cannot be loaded
+     * @throws ParseExtractionException if any error occurs during parsing of the file content
      */
     @Override
     public List<Employee> extractFile(String path, String fileName) {
@@ -43,8 +43,8 @@ public final class EmployeeDataExtractor implements FileExtractor<Employee> {
      *
      * @param file the CSV file object from which to extract {@code Employee} objects
      * @return a list of {@code Employee} objects extracted from the CSV file
-     * @throws FileExtractionException   if the file is not found or cannot be loaded
-     * @throws ParseExtractionException  if any error occurs during parsing of the file content
+     * @throws FileExtractionException  if the file is not found or cannot be loaded
+     * @throws ParseExtractionException if any error occurs during parsing of the file content
      */
     @Override
     public List<Employee> extractFile(File file) {
@@ -89,13 +89,13 @@ public final class EmployeeDataExtractor implements FileExtractor<Employee> {
     }
 
     private static Employee employeeFromLineValues(String[] values) {
-        return Employee.builder()
-                .setId(getIntegerValue(values, 0))
-                .setFirstName(getStringValue(values, 1))
-                .setLastName(getStringValue(values, 2))
-                .setSalary(getIntegerValue(values, 3))
-                .setManagerId(getIntegerValue(values, 4))
-                .build();
+        return new Employee(
+                getIntegerValue(values, 0),
+                getStringValue(values, 1),
+                getStringValue(values, 2),
+                getIntegerValue(values, 3),
+                getIntegerValue(values, 4)
+        );
     }
 
     private static Integer getIntegerValue(String[] values, int index) {

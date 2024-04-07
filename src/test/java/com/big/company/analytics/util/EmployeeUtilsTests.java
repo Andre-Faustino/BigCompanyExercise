@@ -18,28 +18,9 @@ class EmployeeUtilsTests {
 
     @BeforeEach
     void init() {
-        Employee ceo = Employee.builder()
-                .setId(123)
-                .setFirstName("Mark")
-                .setLastName("Zuckerberg")
-                .setSalary(250000)
-                .build();
-
-        Employee emp1 = Employee.builder()
-                .setId(124)
-                .setFirstName("Martin")
-                .setLastName("Chekov")
-                .setSalary(45000)
-                .setManagerId(123)
-                .build();
-
-        Employee emp2 = Employee.builder()
-                .setId(125)
-                .setFirstName("Bob")
-                .setLastName("Ronstad")
-                .setSalary(47000)
-                .setManagerId(123)
-                .build();
+        Employee ceo = new Employee(123, "Mark", "Zuckerberg", 250000, null);
+        Employee emp1 = new Employee(124, "Martin", "Chekov", 45000, 123);
+        Employee emp2 = new Employee(125, "Bob", "Ronstad", 47000, 123);
 
         this.employees = new ArrayList<>();
         this.employees.addAll(Arrays.asList(ceo, emp1, emp2));
@@ -47,17 +28,12 @@ class EmployeeUtilsTests {
 
     @Test
     void shouldFindCEO() {
-        assertEquals(123, EmployeeUtils.findCEO(employees).getId());
+        assertEquals(123, EmployeeUtils.findCEO(employees).id());
     }
 
     @Test
     void shouldFailsDueMultipleCEO() {
-        Employee anotherCEO = Employee.builder()
-                .setId(345)
-                .setFirstName("Elon")
-                .setLastName("Musk")
-                .setSalary(250000)
-                .build();
+        Employee anotherCEO = new Employee(345, "Elon", "Musk", 250000, null);
         employees.add(anotherCEO);
 
         AssertThrows.assertThrows("Employee list has more than one CEO", EmployeeException.class,

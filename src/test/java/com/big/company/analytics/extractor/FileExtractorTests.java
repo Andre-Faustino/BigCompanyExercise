@@ -40,43 +40,13 @@ public class FileExtractorTests {
     void shouldDataSuccessfullyExtracted() {
         List<Employee> employeeData = fileExtractor.extractFile(TEST_FILEPATH, "ValidatedDataWithHeader.csv");
 
-        List<Employee> expectedEmployees =
-                Arrays.asList(
-                        Employee.builder()
-                                .setId(123)
-                                .setFirstName("Joe")
-                                .setLastName("Doe")
-                                .setSalary(60000)
-                                .build(),
-                        Employee.builder()
-                                .setId(124)
-                                .setFirstName("Martin")
-                                .setLastName("Chekov")
-                                .setSalary(45000)
-                                .setManagerId(123)
-                                .build(),
-                        Employee.builder()
-                                .setId(125)
-                                .setFirstName("Bob")
-                                .setLastName("Ronstad")
-                                .setSalary(47000)
-                                .setManagerId(123)
-                                .build(),
-                        Employee.builder()
-                                .setId(300)
-                                .setFirstName("Alice")
-                                .setLastName("Hasacat")
-                                .setSalary(50000)
-                                .setManagerId(124)
-                                .build(),
-                        Employee.builder()
-                                .setId(305)
-                                .setFirstName("Brett")
-                                .setLastName("Hardleaf")
-                                .setSalary(34000)
-                                .setManagerId(300)
-                                .build()
-                );
+        List<Employee> expectedEmployees = Arrays.asList(
+                new Employee(123, "Joe", "Doe", 60000, null),
+                new Employee(124, "Martin", "Chekov", 45000, 123),
+                new Employee(125, "Bob", "Ronstad", 47000, 123),
+                new Employee(300, "Alice", "Hasacat", 50000, 124),
+                new Employee(305, "Brett", "Hardleaf", 34000, 300)
+        );
 
         assertEquals(expectedEmployees.size(), employeeData.size());
 

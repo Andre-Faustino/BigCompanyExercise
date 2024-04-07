@@ -33,18 +33,18 @@ class EmployeeNodeTests {
                 .filter(employee -> employee.getManagerId().isPresent())
                 .forEach(employee -> assertTrue(employeeNode.addEmployee(employee)));
 
-        assertEquals(123, employeeNode.getEmployee().getId());
-        assertEquals(124, employeeNode.getSubordinates().get(0).getEmployee().getId());
-        assertEquals(125, employeeNode.getSubordinates().get(1).getEmployee().getId());
+        assertEquals(123, employeeNode.getEmployee().id());
+        assertEquals(124, employeeNode.getSubordinates().get(0).getEmployee().id());
+        assertEquals(125, employeeNode.getSubordinates().get(1).getEmployee().id());
         assertEquals(300, employeeNode
                 .getSubordinates().get(0)
                 .getSubordinates().get(0)
-                .getEmployee().getId());
+                .getEmployee().id());
         assertEquals(305, employeeNode
                 .getSubordinates().get(0)
                 .getSubordinates().get(0)
                 .getSubordinates().get(0)
-                .getEmployee().getId());
+                .getEmployee().id());
     }
 
     @Test
@@ -55,13 +55,13 @@ class EmployeeNodeTests {
                 .filter(employee -> employee.getManagerId().isPresent())
                 .forEach(employee -> assertTrue(employeeNode.addEmployee(employee)));
 
-        Employee newEmployee = Employee.builder()
-                .setId(306)
-                .setFirstName("Mark")
-                .setLastName("Has Mysterious Manager")
-                .setSalary(30000)
-                .setManagerId(999)
-                .build();
+        Employee newEmployee = new Employee(
+                306,
+                "Mark",
+                "Has Mysterious Manager",
+                30000,
+                999
+        );
         assertFalse(employeeNode.addEmployee(newEmployee));
 
         assertThrows("Employee must not be null", EmployeeNodeException.class,

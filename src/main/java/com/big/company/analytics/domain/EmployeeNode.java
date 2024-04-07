@@ -66,7 +66,7 @@ public final class EmployeeNode {
     }
 
     private boolean addEmployee(Employee employeeToAdd, Integer managerId) {
-        if (managerId.equals(employee.getId())) {
+        if (managerId.equals(employee.id())) {
             EmployeeNode employeeNode = EmployeeNode.builder()
                     .setEmployee(employeeToAdd)
                     .build();
