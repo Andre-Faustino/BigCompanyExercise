@@ -70,6 +70,23 @@ class EmployeeReportTests {
     }
 
     @Test
+    void shouldReportManagersWithSalaryPolicyViolation() {
+        this.employees = new EmployeeDataExtractor().extractFile(TEST_FILEPATH, "SalaryViolationPolicyData.csv");
+        EmployeeReport report = new EmployeeHierarchyReport();
+        report.inputEmployees(employees);
+
+        Map<Employee, String> managers = report.reportManagersSalaryPolicyViolation();
+
+        Integer expectedNumberOfManagersWithPolicyViolation = 2;
+        assertEquals(expectedNumberOfManagersWithPolicyViolation, managers.size());
+
+        managers = report.reportManagersSalaryPolicyViolation(27, 50);
+
+        Integer expectedNumberOfManagersWithCustomPolicyViolation = 3;
+        assertEquals(expectedNumberOfManagersWithCustomPolicyViolation, managers.size());
+    }
+
+    @Test
     void shouldReportManagersWithExcessiveReportingLines() {
         EmployeeReport report = new EmployeeHierarchyReport();
         report.inputEmployees(employees);

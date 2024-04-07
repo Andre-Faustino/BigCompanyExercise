@@ -34,10 +34,11 @@ public interface EmployeeReport {
      *
      * @param minimumPercentage the minimum allowed percentage increase in salary.
      * @param maximumPercentage the maximum allowed percentage increase in salary.
-     * @throws NullPointerException if any param is null
+     * @return a map of the managers and the salary violation description
+     * @throws NullPointerException    if any param is null
      * @throws EmployeeReportException if employees list is not set
      */
-    void reportManagersSalaryPolicyViolation(Integer minimumPercentage, Integer maximumPercentage);
+    Map<Employee, String> reportManagersSalaryPolicyViolation(Integer minimumPercentage, Integer maximumPercentage);
 
     /**
      * Generates a report printed in console on managers who violate the salary policy by falling outside
@@ -49,9 +50,10 @@ public interface EmployeeReport {
      * <br>The criteria is that each manager should have a salary at least a 20%
      * more than the average salary of its direct subordinates, but no more than the 50%
      * than that average.
+     * @return a map of the managers and the salary violation description
      * @throws EmployeeReportException if employees list is not set
      */
-    void reportManagersSalaryPolicyViolation();
+    Map<Employee, String> reportManagersSalaryPolicyViolation();
 
     /**
      * Generates a report printed in console on managers who have an excessive number of reporting lines until the ceo,
@@ -59,7 +61,7 @@ public interface EmployeeReport {
      *
      * @param reportingLinesThreshold the maximum allowed number of reporting lines.
      * @return a map with managers and how much reporting lines higher than the threshold
-     * @throws NullPointerException if {@code reportingLines} is null
+     * @throws NullPointerException    if {@code reportingLines} is null
      * @throws EmployeeReportException if employees list is not set
      */
     Map<Employee, Integer> reportManagersWithExcessiveReportingLines(Integer reportingLinesThreshold);
