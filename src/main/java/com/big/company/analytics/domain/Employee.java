@@ -18,11 +18,12 @@ public record Employee(
     /**
      * Constructs an Employee object.
      *
-     * @param id        Employee ID
-     * @param firstName First name
-     * @param lastName  Last name
-     * @param salary    Salary
+     * @param id        Employee ID (required)
+     * @param firstName First name (required)
+     * @param lastName  Last name (required)
+     * @param salary    Salary (required)
      * @param managerId Manager ID
+     * @throws EmployeeException if misses required params
      */
     public Employee {
         try {
