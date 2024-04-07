@@ -23,6 +23,7 @@ For this interview, I found the following solutions:
  - Allow some customization but provide standard values for the interfaces methods
  - Using an N-tree structure (Employee Node) to handle the hierarchy of employees. It's a good trade-off from spending extra memory to not lose performance on scale
  - Create csv tests for several test cases allowing a more clean test code
+ - Use Java 17 records for a cleaner code
 
 ## Getting Started
 
