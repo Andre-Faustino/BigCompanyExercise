@@ -8,7 +8,6 @@ import com.big.company.analytics.exception.EmployeeReportException;
 import com.big.company.analytics.util.EmployeeUtils;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 /**
