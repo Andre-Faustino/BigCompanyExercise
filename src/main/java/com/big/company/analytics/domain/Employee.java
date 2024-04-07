@@ -1,5 +1,7 @@
 package com.big.company.analytics.domain;
 
+import com.big.company.analytics.exception.EmployeeException;
+
 import java.util.Objects;
 import java.util.Optional;
 
@@ -20,11 +22,15 @@ public final class Employee {
      * @param builder Employee Builder
      */
     public Employee(Builder builder) {
-        this.id = Objects.requireNonNull(builder.id, "Employee id is missing");
-        this.firstName = Objects.requireNonNull(builder.firstName, "Employee first name is missing");
-        this.lastName = Objects.requireNonNull(builder.lastName, "Employee last name is missing");
-        this.salary = Objects.requireNonNull(builder.salary, "Employee salary is missing");
-        this.managerId = builder.managerId;
+        try {
+            this.id = Objects.requireNonNull(builder.id, "Employee id is missing");
+            this.firstName = Objects.requireNonNull(builder.firstName, "Employee first name is missing");
+            this.lastName = Objects.requireNonNull(builder.lastName, "Employee last name is missing");
+            this.salary = Objects.requireNonNull(builder.salary, "Employee salary is missing");
+            this.managerId = builder.managerId;
+        } catch (NullPointerException e) {
+            throw new EmployeeException(e.getMessage());
+        }
     }
 
     /**

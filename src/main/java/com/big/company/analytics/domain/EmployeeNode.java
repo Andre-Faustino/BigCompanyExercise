@@ -21,7 +21,11 @@ public final class EmployeeNode {
      * @throws NullPointerException if the employee in the builder is null.
      */
     public EmployeeNode(Builder builder) {
-        this.employee = Objects.requireNonNull(builder.employee, "Employee must not be null");
+        try {
+            this.employee = Objects.requireNonNull(builder.employee, "Employee must not be null");
+        } catch (NullPointerException e) {
+            throw new EmployeeNodeException(e.getMessage());
+        }
     }
 
     /**
