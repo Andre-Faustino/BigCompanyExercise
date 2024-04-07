@@ -51,7 +51,7 @@ public class EmployeeHierarchyReport implements EmployeeReport {
                     .setEmployee(root)
                     .build();
 
-            return this.addUnorderedEmployeesToHierarchy(employees);
+            return this.addUnorderedEmployeesToHierarchy(employees) + 1;
         } catch (EmployeeNodeException | EmployeeException e) {
             throw new EmployeeReportException(String.format("Error when creating Employee Hierarchy | %s", e.getMessage()));
         }
@@ -64,20 +64,36 @@ public class EmployeeHierarchyReport implements EmployeeReport {
      * @return the number of employees successfully added to the hierarchy
      */
     private int addUnorderedEmployeesToHierarchy(List<Employee> employees) {
-        List<Employee> iterate = employees.stream()
-                .filter(employee -> employee.getManagerId().isPresent())
-                .collect(Collectors.toList());
+        Deque<Employee> validEmployeesQueue = removeEmployeesWithoutValidManagers(employees);
+        int validEmployeesNumber = validEmployeesQueue.size();
 
-        AtomicBoolean shouldLoop = new AtomicBoolean(false);
-        do {
-            shouldLoop.set(false);
-            iterate.removeIf(employee -> {
-                boolean wasSuccessfullyAdded = employeeHierarchy.addEmployee(employee);
-                if (wasSuccessfullyAdded) shouldLoop.set(true);
-                return wasSuccessfullyAdded;
-            });
-        } while (shouldLoop.get());
-        return employees.size() - iterate.size();
+        while (!validEmployeesQueue.isEmpty()) {
+            Employee employee = validEmployeesQueue.pop();
+            if (!employeeHierarchy.addEmployee(employee)) {
+                validEmployeesQueue.addLast(employee);
+            }
+        }
+        return validEmployeesNumber;
+    }
+
+    /**
+     * Remove employees that doesn't have a manager id or its manager id was not found in the list of employees.
+     *
+     * @param employees the list of employees to be validated
+     * @return a deque of valid employees
+     */
+    private Deque<Employee> removeEmployeesWithoutValidManagers(List<Employee> employees) {
+        return employees.stream()
+                .filter(employee -> {
+                    if (employee.getManagerId().isEmpty()) return false;
+                    for (Employee lookup : employees) {
+                        if (employee.getManagerId().get().equals(lookup.getId())) {
+                            return true;
+                        }
+                    }
+                    return false;
+                })
+                .collect(Collectors.toCollection(ArrayDeque::new));
     }
 
     /**
@@ -196,5 +212,4 @@ public class EmployeeHierarchyReport implements EmployeeReport {
             traverseDepthGreaterThan(subordinate, depth + 1, depthThreshold, result);
         }
     }
-
 }
