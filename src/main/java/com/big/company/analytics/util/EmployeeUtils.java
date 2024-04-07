@@ -22,7 +22,7 @@ public abstract class EmployeeUtils {
     public static Employee findCEO(List<Employee> employees) {
         List<Employee> cEOCandidates = employees.stream()
                 .filter(employee -> employee.getManagerId().isEmpty())
-                .collect(Collectors.toList());
+                .toList();
         if (cEOCandidates.size() > 1) throw new EmployeeException("Employee list has more than one CEO");
         if (cEOCandidates.isEmpty()) throw new EmployeeException("Employee list has no CEO");
         return cEOCandidates.get(0);
