@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static com.big.company.analytics.util.AssertThrows.assertThrows;
+import static com.big.company.analytics.test.util.AssertThrows.assertThrows;
 
 public class FileExtractorTests {
 

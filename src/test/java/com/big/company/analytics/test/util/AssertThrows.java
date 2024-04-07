@@ -1,4 +1,4 @@
-package com.big.company.analytics.util;
+package com.big.company.analytics.test.util;
 
 import org.junit.jupiter.api.function.Executable;
 

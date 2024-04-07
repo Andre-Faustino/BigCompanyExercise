@@ -2,6 +2,7 @@ package com.big.company.analytics.util;
 
 import com.big.company.analytics.domain.Employee;
 import com.big.company.analytics.exception.EmployeeException;
+import com.big.company.analytics.test.util.AssertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

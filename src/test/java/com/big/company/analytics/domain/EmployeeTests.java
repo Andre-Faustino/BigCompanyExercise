@@ -1,7 +1,7 @@
 package com.big.company.analytics.domain;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static com.big.company.analytics.util.AssertThrows.assertThrows;
+import static com.big.company.analytics.test.util.AssertThrows.assertThrows;
 
 import org.junit.jupiter.api.Test;
 

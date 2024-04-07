@@ -3,7 +3,7 @@ package com.big.company.analytics.domain;
 import com.big.company.analytics.exception.EmployeeNodeException;
 import com.big.company.analytics.extractor.EmployeeDataExtractor;
 
-import static com.big.company.analytics.util.AssertThrows.*;
+import static com.big.company.analytics.test.util.AssertThrows.*;
 
 import com.big.company.analytics.util.EmployeeUtils;
 import org.junit.jupiter.api.BeforeEach;
