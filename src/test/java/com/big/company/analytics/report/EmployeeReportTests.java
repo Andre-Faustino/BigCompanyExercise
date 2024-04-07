@@ -60,6 +60,16 @@ class EmployeeReportTests {
     }
 
     @Test
+    void shouldFailWhenCallReportsMethodsWithoutInputEmployees() {
+        EmployeeReport report = new EmployeeHierarchyReport();
+
+        assertThrows("Employees list not set, should input employees before reports call", EmployeeReportException.class,
+                report::reportManagersSalaryPolicyViolation);
+        assertThrows("Employees list not set, should input employees before reports call", EmployeeReportException.class,
+                report::reportManagersWithExcessiveReportingLines);
+    }
+
+    @Test
     void shouldReportManagersWithExcessiveReportingLines() {
         EmployeeReport report = new EmployeeHierarchyReport();
         report.inputEmployees(employees);

@@ -72,7 +72,7 @@ public class EmployeeHierarchyReport implements EmployeeReport {
      */
     @Override
     public void reportManagersSalaryPolicyViolation() {
-
+        reportManagersSalaryPolicyViolation(STANDARD_MINIMUM_PERCENTAGE, STANDARD_MAXIMUM_PERCENTAGE);
     }
 
     /**
@@ -80,6 +80,11 @@ public class EmployeeHierarchyReport implements EmployeeReport {
      */
     @Override
     public void reportManagersSalaryPolicyViolation(Integer minimumPercentage, Integer maximumPercentage) {
+        Objects.requireNonNull(minimumPercentage);
+        Objects.requireNonNull(maximumPercentage);
+        if (employeeHierarchy == null)
+            throw new EmployeeReportException("Employees list not set, should input employees before reports call");
+
 
     }
 
@@ -88,7 +93,7 @@ public class EmployeeHierarchyReport implements EmployeeReport {
      */
     @Override
     public Map<Employee, Integer> reportManagersWithExcessiveReportingLines() {
-        return getNodesWithDepthGreaterThan(STANDARD_REPORTING_LINES_THRESHOLD);
+        return reportManagersWithExcessiveReportingLines(STANDARD_REPORTING_LINES_THRESHOLD);
     }
 
     /**
