@@ -46,9 +46,7 @@ public class EmployeeHierarchyReport implements EmployeeReport {
         if (employees == null) throw new EmployeeReportException("Employees list should not be null");
         try {
             Employee root = EmployeeUtils.findCEO(employees);
-            employeeHierarchy = EmployeeNode.builder()
-                    .setEmployee(root)
-                    .build();
+            employeeHierarchy = new EmployeeNode(root);
 
             return this.addUnorderedEmployeesToHierarchy(employees) + 1;
         } catch (EmployeeNodeException | EmployeeException e) {
@@ -154,12 +152,12 @@ public class EmployeeHierarchyReport implements EmployeeReport {
     }
 
     private static void getNodesSubordinatesSalaryAverage(EmployeeNode node, Map<Employee, Double> result) {
-        if (node.getSubordinates().isEmpty()) return;
-        Double average = node.getSubordinates().stream()
-                .collect(Collectors.averagingInt(child -> child.getEmployee().salary()));
-        result.put(node.getEmployee(), average);
+        if (node.subordinates().isEmpty()) return;
+        Double average = node.subordinates().stream()
+                .collect(Collectors.averagingInt(child -> child.employee().salary()));
+        result.put(node.employee(), average);
 
-        for (EmployeeNode subordinate : node.getSubordinates()) {
+        for (EmployeeNode subordinate : node.subordinates()) {
             getNodesSubordinatesSalaryAverage(subordinate, result);
         }
     }
@@ -205,9 +203,9 @@ public class EmployeeHierarchyReport implements EmployeeReport {
 
     private void traverseDepthGreaterThan(EmployeeNode node, int depth, Integer depthThreshold, Map<Employee, Integer> result) {
         if (depth > depthThreshold) {
-            result.put(node.getEmployee(), depth - depthThreshold);
+            result.put(node.employee(), depth - depthThreshold);
         }
-        for (EmployeeNode subordinate : node.getSubordinates()) {
+        for (EmployeeNode subordinate : node.subordinates()) {
             traverseDepthGreaterThan(subordinate, depth + 1, depthThreshold, result);
         }
     }

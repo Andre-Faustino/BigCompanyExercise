@@ -28,29 +28,29 @@ class EmployeeNodeTests {
     @Test
     void shouldCreateEmployeeHierarchySuccessfully() {
         Employee ceo = EmployeeUtils.findCEO(employees);
-        EmployeeNode employeeNode = EmployeeNode.builder().setEmployee(ceo).build();
+        EmployeeNode employeeNode = new EmployeeNode(ceo);
         employees.stream()
                 .filter(employee -> employee.getManagerId().isPresent())
                 .forEach(employee -> assertTrue(employeeNode.addEmployee(employee)));
 
-        assertEquals(123, employeeNode.getEmployee().id());
-        assertEquals(124, employeeNode.getSubordinates().get(0).getEmployee().id());
-        assertEquals(125, employeeNode.getSubordinates().get(1).getEmployee().id());
+        assertEquals(123, employeeNode.employee().id());
+        assertEquals(124, employeeNode.subordinates().get(0).employee().id());
+        assertEquals(125, employeeNode.subordinates().get(1).employee().id());
         assertEquals(300, employeeNode
-                .getSubordinates().get(0)
-                .getSubordinates().get(0)
-                .getEmployee().id());
+                .subordinates().get(0)
+                .subordinates().get(0)
+                .employee().id());
         assertEquals(305, employeeNode
-                .getSubordinates().get(0)
-                .getSubordinates().get(0)
-                .getSubordinates().get(0)
-                .getEmployee().id());
+                .subordinates().get(0)
+                .subordinates().get(0)
+                .subordinates().get(0)
+                .employee().id());
     }
 
     @Test
     void shouldFailsWithInvalidEmployeeWhenAddToNode() {
         Employee ceo = EmployeeUtils.findCEO(employees);
-        EmployeeNode employeeNode = EmployeeNode.builder().setEmployee(ceo).build();
+        EmployeeNode employeeNode = new EmployeeNode(ceo);
         employees.stream()
                 .filter(employee -> employee.getManagerId().isPresent())
                 .forEach(employee -> assertTrue(employeeNode.addEmployee(employee)));

@@ -9,41 +9,35 @@ import java.util.Objects;
 /**
  * Represents a node in an employee hierarchy tree.
  */
-public final class EmployeeNode {
-
-    private final Employee employee;
-    private final List<EmployeeNode> subordinates = new ArrayList<>();
+public record EmployeeNode(
+        Employee employee,
+        List<EmployeeNode> subordinates
+) {
 
     /**
      * Constructs an EmployeeNode object.
      *
-     * @param builder The builder object used to construct this EmployeeNode.
-     * @throws NullPointerException if the employee in the builder is null.
+     * @param employee     Employee (required)
+     * @param subordinates Subordinates (required)
+     * @throws EmployeeNodeException if any params in the builder is null.
      */
-    public EmployeeNode(Builder builder) {
+    public EmployeeNode {
         try {
-            this.employee = Objects.requireNonNull(builder.employee, "Employee must not be null");
+            Objects.requireNonNull(employee, "Employee must not be null");
+            Objects.requireNonNull(subordinates, "Subordinates list must not be null");
         } catch (NullPointerException e) {
             throw new EmployeeNodeException(e.getMessage());
         }
     }
 
     /**
-     * Gets the employee associated with this node.
+     * Constructs an EmployeeNode object. Subordinates list will be an empty list.
      *
-     * @return The employee object.
+     * @param employee Employee (required)
+     * @throws EmployeeNodeException if the employee in the builder is null.
      */
-    public Employee getEmployee() {
-        return employee;
-    }
-
-    /**
-     * Gets the list of subordinates of this employee node.
-     *
-     * @return The list of subordinate EmployeeNode objects.
-     */
-    public List<EmployeeNode> getSubordinates() {
-        return subordinates;
+    public EmployeeNode(Employee employee) {
+        this(employee, new ArrayList<>());
     }
 
     /**
@@ -67,9 +61,7 @@ public final class EmployeeNode {
 
     private boolean addEmployee(Employee employeeToAdd, Integer managerId) {
         if (managerId.equals(employee.id())) {
-            EmployeeNode employeeNode = EmployeeNode.builder()
-                    .setEmployee(employeeToAdd)
-                    .build();
+            EmployeeNode employeeNode = new EmployeeNode(employeeToAdd);
             subordinates.add(employeeNode);
             return true;
         } else {
@@ -78,49 +70,5 @@ public final class EmployeeNode {
             }
         }
         return false;
-    }
-
-    /**
-     * Returns a new builder instance for constructing an EmployeeNode.
-     *
-     * @return The builder object.
-     */
-    public static Builder builder() {
-        return new Builder();
-    }
-
-    /**
-     * Builder class for constructing EmployeeNode instances.
-     */
-    public static class Builder {
-
-        private Employee employee;
-
-        private Builder() {
-        }
-
-        /**
-         * Sets the employee for the builder.
-         *
-         * @param employee The employee to set.
-         * @return The builder object.
-         */
-        public Builder setEmployee(Employee employee) {
-            this.employee = employee;
-            return this;
-        }
-
-        /**
-         * Builds and returns a new EmployeeNode instance.
-         * <br>Required properties for build:
-         * <ul>
-         * <li>employee</li>
-         * </ul>
-         *
-         * @return The constructed EmployeeNode object.
-         */
-        public EmployeeNode build() {
-            return new EmployeeNode(this);
-        }
     }
 }
