@@ -7,6 +7,8 @@ import com.big.company.analytics.exception.ParseExtractionException;
 import java.io.*;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 /**
@@ -21,6 +23,9 @@ public final class EmployeeDataExtractor implements FileExtractor<Employee> {
      * The delimiter used in the CSV file.
      */
     private final static String DELIMITER = ",";
+
+    private final static List<String> headerOrder =
+            Arrays.asList("id", "firstname", "lastname", "salary", "managerid");
 
     /**
      * Flag indicating whether the CSV file has a header line.
@@ -80,12 +85,16 @@ public final class EmployeeDataExtractor implements FileExtractor<Employee> {
         ) {
             String line;
             int curLine = 0;
+            int[] header_mapper = new int[0];
             while ((line = br.readLine()) != null) {
                 if (has_header && curLine == 0) {
+                    header_mapper = createHeaderMapper(line.split(DELIMITER));
                     curLine++;
                     continue;
                 }
-                String[] values = line.split(DELIMITER);
+                String[] values = (has_header)
+                        ? orderExtractedData(header_mapper, line.split(DELIMITER))
+                        : line.split(DELIMITER);
                 try {
                     employees.add(employeeFromLineValues(values));
                 } catch (Exception e) {
@@ -118,6 +127,23 @@ public final class EmployeeDataExtractor implements FileExtractor<Employee> {
                 getIntegerValue(values, 3),
                 getIntegerValue(values, 4)
         );
+    }
+
+    private int[] createHeaderMapper(String[] header) throws ParseExtractionException {
+        List<String> headerList = Arrays.stream(header).map(String::toLowerCase).toList();
+        new HashSet<>(headerOrder).forEach(requiredHeader -> {
+            if (!headerList.contains(requiredHeader))
+                throw new ParseExtractionException(String.format("Required header not found on header file: %s", requiredHeader));
+        });
+        return headerList.stream().mapToInt(headerOrder::indexOf).toArray();
+    }
+
+    private String[] orderExtractedData(int[] headerMapper, String[] values) {
+        String[] orderedData = new String[values.length];
+        for (int i = 0; i < values.length; i++) {
+            orderedData[headerMapper[i]] = values[i];
+        }
+        return orderedData;
     }
 
     private static Integer getIntegerValue(String[] values, int index) {

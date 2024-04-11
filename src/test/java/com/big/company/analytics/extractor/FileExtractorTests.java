@@ -86,7 +86,24 @@ public class FileExtractorTests {
 
     @Test
     void shouldWrongHeaderConfigFails() {
-        List<Employee> employeeData = fileExtractor.extractFile(TEST_FILEPATH, "ValidatedDataWithoutHeader.csv");
+        assertThrows("Required header not found on header file: firstname", ParseExtractionException.class,
+                () -> fileExtractor.extractFile(TEST_FILEPATH, "ValidatedDataWithoutHeader.csv"));
+
+
+        FileExtractor<Employee> fileExtractorExpectingNoHeader = new EmployeeDataExtractor(false);
+        assertThrows("Error on line 0 -> For input string: \"Id\"", ParseExtractionException.class,
+                () -> fileExtractorExpectingNoHeader.extractFile(TEST_FILEPATH, "ValidatedDataWithHeader.csv"));
+    }
+
+    @Test
+    void shouldInvalidDataHeaderFails() {
+        assertThrows("Required header not found on header file: lastname", ParseExtractionException.class,
+                () -> fileExtractor.extractFile(TEST_FILEPATH, "DataWithInvalidHeader.csv"));
+    }
+
+    @Test
+    void shouldDataWithOddHeaderSuccess() {
+        List<Employee> employeeData = fileExtractor.extractFile(TEST_FILEPATH, "DataWithOddCaseHeader.csv");
 
         List<Employee> expectedEmployees = Arrays.asList(
                 new Employee(123, "Joe", "Doe", 60000, null),
@@ -96,11 +113,6 @@ public class FileExtractorTests {
                 new Employee(305, "Brett", "Hardleaf", 34000, 300)
         );
 
-        // employeeData.size() + 1 due loss first line data file
-        assertEquals(expectedEmployees.size(), employeeData.size() + 1);
-
-        FileExtractor<Employee> fileExtractorExpectingNoHeader = new EmployeeDataExtractor(false);
-        assertThrows("Error on line 0 -> For input string: \"Id\"", ParseExtractionException.class,
-                () -> fileExtractorExpectingNoHeader.extractFile(TEST_FILEPATH, "ValidatedDataWithHeader.csv"));
+        assertEquals(expectedEmployees.size(), employeeData.size());
     }
 }
