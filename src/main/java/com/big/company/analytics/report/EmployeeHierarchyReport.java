@@ -64,11 +64,23 @@ public class EmployeeHierarchyReport implements EmployeeReport {
         Deque<Employee> validEmployeesQueue = removeEmployeesWithoutValidManagers(employees);
         int validEmployeesNumber = validEmployeesQueue.size();
 
+        int cursor = 0;
+        int queueSize = validEmployeesNumber;
+        boolean retry = false;
         while (!validEmployeesQueue.isEmpty()) {
+            if (cursor >= queueSize) {
+                if (!retry) break;
+                cursor = 0;
+                queueSize = validEmployeesQueue.size();
+                retry = false;
+            }
+
             Employee employee = validEmployeesQueue.pop();
             if (!employeeHierarchy.addEmployee(employee)) {
                 validEmployeesQueue.addLast(employee);
+                retry = true;
             }
+            cursor++;
         }
         return validEmployeesNumber;
     }
