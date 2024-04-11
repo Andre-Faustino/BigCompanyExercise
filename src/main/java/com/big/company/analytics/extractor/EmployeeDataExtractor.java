@@ -49,10 +49,12 @@ public final class EmployeeDataExtractor implements FileExtractor<Employee> {
     @Override
     public List<Employee> extractFile(File file) {
         if (file == null) throw new FileExtractionException("File should not be null");
-        FileReader fileReader = loadFileReader(file);
 
         List<Employee> employees = new ArrayList<>();
-        try (BufferedReader br = new BufferedReader(fileReader)) {
+        try (
+                FileReader fileReader = new FileReader(file);
+                BufferedReader br = new BufferedReader(fileReader)
+        ) {
             String line;
             int curLine = 0;
             while ((line = br.readLine()) != null) {
@@ -68,19 +70,16 @@ public final class EmployeeDataExtractor implements FileExtractor<Employee> {
                 }
                 curLine++;
             }
-        } catch (IOException e) {
-            throw new FileExtractionException("Error reading file after loaded");
-        }
-        return employees;
-    }
-
-    private static FileReader loadFileReader(File file) throws FileExtractionException {
-        try {
-            return new FileReader(file);
         } catch (FileNotFoundException e) {
             throw new FileExtractionException(
-                    String.format("File doesn't exist or it's not readable | Filepath: %s | Filename: %s", file.getName(), file.getPath()));
+                    String.format("File not found | Filepath: %s | Filename: %s", file.getPath(), file.getName()));
+        } catch (SecurityException e) {
+            throw new FileExtractionException(
+                    String.format("File reading not permitted | Filepath: %s | Filename: %s", file.getPath(), file.getName()));
+        } catch (IOException e) {
+            throw new FileExtractionException("Error when reading the file");
         }
+        return employees;
     }
 
     private static File loadFile(String path, String fileName) {

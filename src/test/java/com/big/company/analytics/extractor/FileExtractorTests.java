@@ -25,7 +25,6 @@ public class FileExtractorTests {
 
     @Test
     void shouldFailWhenExtractFileWithWrongParameters() {
-
         assertThrows("File should not be null", FileExtractionException.class,
                 () -> fileExtractor.extractFile(null));
 
@@ -34,6 +33,12 @@ public class FileExtractorTests {
 
         assertThrows("Path and filename should not be blank", FileExtractionException.class,
                 () -> fileExtractor.extractFile("", ""));
+    }
+
+    @Test
+    void shouldFailWhenFileNotExistParameters() {
+        assertThrows("File not found | Filepath: this\\path\\not\\exist\\NoFile | Filename: NoFile", FileExtractionException.class,
+                () -> fileExtractor.extractFile("this/path/not/exist", "NoFile"));
     }
 
     @Test
