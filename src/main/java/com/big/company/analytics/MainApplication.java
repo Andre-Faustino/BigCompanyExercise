@@ -54,10 +54,10 @@ public class MainApplication {
             return extractor.extractFile(csvFile);
         } catch (FileExtractionException e) {
             System.out.println("ERROR when loading the file");
-            throw new RuntimeException(e.getMessage());
+            throw new FileExtractionException(e.getMessage());
         } catch (ParseExtractionException e) {
             System.out.println("ERROR when reading the file");
-            throw new RuntimeException(e.getMessage());
+            throw new ParseExtractionException(e.getMessage());
         } catch (Exception e) {
             System.out.println("ERROR : unexpected error");
             throw new RuntimeException(e.getMessage());
@@ -71,7 +71,7 @@ public class MainApplication {
             report.reportManagersWithExcessiveReportingLines();
         } catch (EmployeeReportException e) {
             System.out.println("ERROR creating the reports of employees");
-            throw new RuntimeException(e.getMessage());
+            throw new EmployeeReportException(e.getMessage());
         } catch (Exception e) {
             System.out.println("ERROR : unexpected error");
             throw new RuntimeException(e.getMessage());
