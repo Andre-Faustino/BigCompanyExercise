@@ -17,8 +17,31 @@ import java.util.List;
  */
 public final class EmployeeDataExtractor implements FileExtractor<Employee> {
 
+    /**
+     * The delimiter used in the CSV file.
+     */
     private final static String DELIMITER = ",";
-    private final static Boolean HAS_HEADER = true;
+
+    /**
+     * Flag indicating whether the CSV file has a header line.
+     */
+    private final Boolean has_header;
+
+    /**
+     * Constructs a new {@code EmployeeDataExtractor} with the specified value for whether the CSV file has a header line.
+     *
+     * @param has_header {@code true} if the CSV file has a header line to be skipped, {@code false} otherwise
+     */
+    public EmployeeDataExtractor(Boolean has_header) {
+        this.has_header = has_header;
+    }
+
+    /**
+     * Constructs a new {@code EmployeeDataExtractor} with default settings, assuming the CSV file has a header line.
+     */
+    public EmployeeDataExtractor() {
+        this.has_header = true;
+    }
 
     /**
      * Extracts {@code Employee} objects from a CSV file specified by path and filename.
@@ -58,7 +81,7 @@ public final class EmployeeDataExtractor implements FileExtractor<Employee> {
             String line;
             int curLine = 0;
             while ((line = br.readLine()) != null) {
-                if (HAS_HEADER && curLine == 0) {
+                if (has_header && curLine == 0) {
                     curLine++;
                     continue;
                 }

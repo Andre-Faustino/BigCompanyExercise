@@ -67,4 +67,40 @@ public class FileExtractorTests {
         assertThrows("Error on line 2 -> Employee last name is missing", ParseExtractionException.class,
                 () -> fileExtractor.extractFile(TEST_FILEPATH, "MissingData.csv"));
     }
+
+    @Test
+    void shouldSuccessfullyInputDataWithoutHeader() {
+        fileExtractor = new EmployeeDataExtractor(false);
+        List<Employee> employeeData = fileExtractor.extractFile(TEST_FILEPATH, "ValidatedDataWithoutHeader.csv");
+
+        List<Employee> expectedEmployees = Arrays.asList(
+                new Employee(123, "Joe", "Doe", 60000, null),
+                new Employee(124, "Martin", "Chekov", 45000, 123),
+                new Employee(125, "Bob", "Ronstad", 47000, 123),
+                new Employee(300, "Alice", "Hasacat", 50000, 124),
+                new Employee(305, "Brett", "Hardleaf", 34000, 300)
+        );
+
+        assertEquals(expectedEmployees.size(), employeeData.size());
+    }
+
+    @Test
+    void shouldWrongHeaderConfigFails() {
+        List<Employee> employeeData = fileExtractor.extractFile(TEST_FILEPATH, "ValidatedDataWithoutHeader.csv");
+
+        List<Employee> expectedEmployees = Arrays.asList(
+                new Employee(123, "Joe", "Doe", 60000, null),
+                new Employee(124, "Martin", "Chekov", 45000, 123),
+                new Employee(125, "Bob", "Ronstad", 47000, 123),
+                new Employee(300, "Alice", "Hasacat", 50000, 124),
+                new Employee(305, "Brett", "Hardleaf", 34000, 300)
+        );
+
+        // employeeData.size() + 1 due loss first line data file
+        assertEquals(expectedEmployees.size(), employeeData.size() + 1);
+
+        FileExtractor<Employee> fileExtractorExpectingNoHeader = new EmployeeDataExtractor(false);
+        assertThrows("Error on line 0 -> For input string: \"Id\"", ParseExtractionException.class,
+                () -> fileExtractorExpectingNoHeader.extractFile(TEST_FILEPATH, "ValidatedDataWithHeader.csv"));
+    }
 }
