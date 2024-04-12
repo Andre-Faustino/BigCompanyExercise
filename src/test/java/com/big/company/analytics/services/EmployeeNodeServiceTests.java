@@ -46,7 +46,7 @@ class EmployeeNodeServiceTests {
     @Test
     void shouldInvalidEmployeesListFails() {
         EmployeeNodeService nodeService = new EmployeeNodeGenerator();
-        assertThrows("Employees list should not be null", EmployeeNodeServiceException.class,
+        assertThrows("Employees list must not be null", NullPointerException.class,
                 () -> nodeService.getEmployeesHierarchy(null));
 
         Employee anotherCEO = new Employee(345, "Elon", "Musk", 250000, null);

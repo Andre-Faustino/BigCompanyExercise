@@ -16,7 +16,8 @@ public interface EmployeeNodeService {
      *
      * @param employees the list of employees to be reported
      * @return {@code EmployeeNode} as root node of the generated employee hierarchy tree
-     * @throws EmployeeNodeServiceException if employees list is null or not valid
+     * @throws NullPointerException if employees list is null
+     * @throws EmployeeNodeServiceException if employees list is not valid e.g. not having an eligible ceo
      */
     EmployeeNode getEmployeesHierarchy(List<Employee> employees);
 }

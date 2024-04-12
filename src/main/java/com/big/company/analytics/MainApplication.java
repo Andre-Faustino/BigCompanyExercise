@@ -1,14 +1,16 @@
 package com.big.company.analytics;
 
 import com.big.company.analytics.domain.Employee;
-import com.big.company.analytics.exception.EmployeeReportException;
+import com.big.company.analytics.domain.EmployeeNode;
 import com.big.company.analytics.exception.FileExtractionException;
 import com.big.company.analytics.exception.ParseExtractionException;
 import com.big.company.analytics.exception.UnexpectedException;
+import com.big.company.analytics.services.EmployeeNodeService;
 import com.big.company.analytics.services.impl.EmployeeDataExtractor;
 import com.big.company.analytics.services.FileExtractor;
 import com.big.company.analytics.services.impl.EmployeeHierarchyReport;
 import com.big.company.analytics.services.EmployeeReport;
+import com.big.company.analytics.services.impl.EmployeeNodeGenerator;
 
 import java.io.File;
 import java.util.List;
@@ -32,11 +34,19 @@ public class MainApplication {
         System.out.println("Extraction successfully done!");
         System.out.println();
 
+        System.out.println("Creating employee hierarchy...");
+
+        EmployeeNodeService nodeService = new EmployeeNodeGenerator();
+        EmployeeNode employeesHierarchy = nodeService.getEmployeesHierarchy(employees);
+
+        System.out.println("Employee hierarchy generated!");
+        System.out.println();
+
         System.out.println("Init report of managers with policy violation");
         System.out.println();
 
         EmployeeReport report = new EmployeeHierarchyReport();
-        runReports(report, employees);
+        runReports(report, employeesHierarchy);
         System.out.println("=========== FINISHING ANALYTICS REPORTS ===========");
     }
 
@@ -65,14 +75,13 @@ public class MainApplication {
         }
     }
 
-    private static void runReports(EmployeeReport report, List<Employee> employees) {
+    private static void runReports(EmployeeReport report, EmployeeNode employees) {
         try {
-            report.inputEmployees(employees);
-            report.reportManagersSalaryPolicyViolation();
-            report.reportManagersWithExcessiveReportingLines();
-        } catch (EmployeeReportException e) {
-            System.out.println("ERROR creating the reports of employees");
-            throw new EmployeeReportException(e.getMessage());
+            report.reportManagersSalaryPolicyViolation(employees);
+            report.reportManagersWithExcessiveReportingLines(employees);
+        } catch (NullPointerException e) {
+            System.out.printf("ERROR creating the reports of employees | %s%n", e.getMessage());
+            throw new NullPointerException(e.getMessage());
         } catch (Exception e) {
             System.out.println("ERROR : unexpected error");
             throw new UnexpectedException(e.getMessage());

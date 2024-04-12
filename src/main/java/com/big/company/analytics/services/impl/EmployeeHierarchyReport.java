@@ -2,11 +2,7 @@ package com.big.company.analytics.services.impl;
 
 import com.big.company.analytics.domain.Employee;
 import com.big.company.analytics.domain.EmployeeNode;
-import com.big.company.analytics.exception.EmployeeException;
-import com.big.company.analytics.exception.EmployeeNodeException;
-import com.big.company.analytics.exception.EmployeeReportException;
 import com.big.company.analytics.services.EmployeeReport;
-import com.big.company.analytics.util.EmployeeUtils;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -35,98 +31,25 @@ public class EmployeeHierarchyReport implements EmployeeReport {
     private static final int DEFAULT_MAXIMUM_PERCENTAGE = 50;
 
     /**
-     * Root node of the employee hierarchy (CEO)
-     */
-    private EmployeeNode employeeHierarchy;
-
-    /**
      * {@inheritDoc}
      */
     @Override
-    public synchronized Integer inputEmployees(List<Employee> employees) {
-        if (employees == null) throw new EmployeeReportException("Employees list should not be null");
-        try {
-            Employee root = EmployeeUtils.findCEO(employees);
-            employeeHierarchy = new EmployeeNode(root);
-
-            return this.addUnorderedEmployeesToHierarchy(employees) + 1;
-        } catch (EmployeeNodeException | EmployeeException e) {
-            throw new EmployeeReportException(String.format("Error when creating Employee Hierarchy | %s", e.getMessage()));
-        }
-    }
-
-    /**
-     * Handle and add unordered employees to the employee hierarchy.
-     *
-     * @param employees the list of employees to be added to the hierarchy
-     * @return the number of employees successfully added to the hierarchy
-     */
-    private int addUnorderedEmployeesToHierarchy(List<Employee> employees) {
-        Deque<Employee> validEmployeesQueue = removeEmployeesWithoutValidManagers(employees);
-        int validEmployeesNumber = validEmployeesQueue.size();
-
-        int cursor = 0;
-        int queueSize = validEmployeesNumber;
-        boolean retry = false;
-        while (!validEmployeesQueue.isEmpty()) {
-            if (cursor >= queueSize) {
-                if (!retry) break;
-                cursor = 0;
-                queueSize = validEmployeesQueue.size();
-                retry = false;
-            }
-
-            Employee employee = validEmployeesQueue.pop();
-            if (!employeeHierarchy.addEmployee(employee)) {
-                validEmployeesQueue.addLast(employee);
-                retry = true;
-            }
-            cursor++;
-        }
-        return validEmployeesNumber;
-    }
-
-    /**
-     * Remove employees that doesn't have a manager id or its manager id was not found in the list of employees.
-     *
-     * @param employees the list of employees to be validated
-     * @return a deque of valid employees
-     */
-    private Deque<Employee> removeEmployeesWithoutValidManagers(List<Employee> employees) {
-        Set<Integer> ids = new HashSet<>(employees.stream().map(Employee::id).toList());
-        return employees.stream()
-                .filter(employee -> {
-                    if (employee.getManagerId().isEmpty()) return false;
-                    if (!ids.contains(employee.getManagerId().get())) {
-                        System.out.printf("Warning -> Removing employee with id %d due no manager id %d was found on the list%n", employee.id(), employee.getManagerId().get());
-                        return false;
-                    }
-                    return true;
-                })
-                .collect(Collectors.toCollection(ArrayDeque::new));
+    public Map<Employee, String> reportManagersSalaryPolicyViolation(EmployeeNode employeeHierarchy) {
+        return reportManagersSalaryPolicyViolation(employeeHierarchy, DEFAULT_MINIMUM_PERCENTAGE, DEFAULT_MAXIMUM_PERCENTAGE);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Map<Employee, String> reportManagersSalaryPolicyViolation() {
-        return reportManagersSalaryPolicyViolation(DEFAULT_MINIMUM_PERCENTAGE, DEFAULT_MAXIMUM_PERCENTAGE);
-    }
+    public Map<Employee, String> reportManagersSalaryPolicyViolation(EmployeeNode employeeHierarchy, Integer minimumPercentage, Integer maximumPercentage) {
+        Objects.requireNonNull(minimumPercentage, "Minimum Percentage must not be null");
+        Objects.requireNonNull(maximumPercentage, "Maximum Percentage must not be null");
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Map<Employee, String> reportManagersSalaryPolicyViolation(Integer minimumPercentage, Integer maximumPercentage) {
-        Objects.requireNonNull(minimumPercentage);
-        Objects.requireNonNull(maximumPercentage);
+        if (employeeHierarchy == null)
+            throw new NullPointerException("Employees hierarchy must not be null");
 
-        EmployeeNode employees = this.employeeHierarchy;
-        if (employees == null)
-            throw new EmployeeReportException("Employees list not set, should input employees before reports call");
-
-        Map<Employee, String> managersWithPolicyViolation = findManagersWithPolicyViolation(employees, minimumPercentage, maximumPercentage);
+        Map<Employee, String> managersWithPolicyViolation = findManagersWithPolicyViolation(employeeHierarchy, minimumPercentage, maximumPercentage);
 
         System.out.printf("----- Report of employees with salary policy violation -----%n");
         System.out.printf("-> Minimum percentage allowed: %d %n", minimumPercentage);
@@ -200,22 +123,21 @@ public class EmployeeHierarchyReport implements EmployeeReport {
      * {@inheritDoc}
      */
     @Override
-    public Map<Employee, Integer> reportManagersWithExcessiveReportingLines() {
-        return reportManagersWithExcessiveReportingLines(DEFAULT_REPORTING_LINES_THRESHOLD);
+    public Map<Employee, Integer> reportManagersWithExcessiveReportingLines(EmployeeNode employeeHierarchy) {
+        return reportManagersWithExcessiveReportingLines(employeeHierarchy, DEFAULT_REPORTING_LINES_THRESHOLD);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public Map<Employee, Integer> reportManagersWithExcessiveReportingLines(Integer reportingLinesThreshold) {
-        Objects.requireNonNull(reportingLinesThreshold);
+    public Map<Employee, Integer> reportManagersWithExcessiveReportingLines(EmployeeNode employeeHierarchy, Integer reportingLinesThreshold) {
+        Objects.requireNonNull(reportingLinesThreshold, "Reporting lines threshold must not be null");
 
-        EmployeeNode employees = this.employeeHierarchy;
-        if (employees == null)
-            throw new EmployeeReportException("Employees list not set, should input employees before reports call");
+        if (employeeHierarchy == null)
+            throw new NullPointerException("Employees hierarchy must not be null");
 
-        Map<Employee, Integer> managerAndReportingLines = getNodesWithDepthGreaterThan(employees, reportingLinesThreshold);
+        Map<Employee, Integer> managerAndReportingLines = getNodesWithDepthGreaterThan(employeeHierarchy, reportingLinesThreshold);
 
         System.out.printf("----- Report of employees with reporting line higher than %d -----%n", reportingLinesThreshold);
         System.out.printf("%-12s|%-12s|%-12s|%-12s%n",

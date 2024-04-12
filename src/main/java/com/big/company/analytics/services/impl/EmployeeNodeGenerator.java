@@ -22,7 +22,7 @@ public class EmployeeNodeGenerator implements EmployeeNodeService {
      */
     @Override
     public EmployeeNode getEmployeesHierarchy(List<Employee> employees) {
-        if (employees == null) throw new EmployeeNodeServiceException("Employees list should not be null");
+        if (employees == null) throw new NullPointerException("Employees list must not be null");
         try {
             Employee ceo = EmployeeUtils.findCEO(employees);
             EmployeeNode root = new EmployeeNode(ceo);
