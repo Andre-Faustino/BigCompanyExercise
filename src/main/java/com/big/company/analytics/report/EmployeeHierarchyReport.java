@@ -130,10 +130,15 @@ public class EmployeeHierarchyReport implements EmployeeReport {
         System.out.printf("----- Report of employees with salary policy violation -----%n");
         System.out.printf("-> Minimum percentage allowed: %d %n", minimumPercentage);
         System.out.printf("-> Maximum percentage allowed: %d %n", maximumPercentage);
-        System.out.println("  ID | FIRST NAME | LAST NAME | SALARY | VIOLATION");
+        System.out.printf("%-12s|%-12s|%-12s|%-12s|%-12s%n",
+                "ID",
+                "FIRST NAME",
+                "LAST NAME",
+                "SALARY",
+                "VIOLATION");
 
         managersWithPolicyViolation.forEach((employee, violationDescr) ->
-                System.out.printf(" %d |  %s  |  %s  |  %d  |  %s  %n",
+                System.out.printf("%-12d|%-12s|%-12s|%-12d|%s%n",
                         employee.id(),
                         employee.firstName(),
                         employee.lastName(),
@@ -198,10 +203,14 @@ public class EmployeeHierarchyReport implements EmployeeReport {
         Map<Employee, Integer> managerAndReportingLines = getNodesWithDepthGreaterThan(employeeHierarchy, reportingLinesThreshold);
 
         System.out.printf("----- Report of employees with reporting line higher than %d -----%n", reportingLinesThreshold);
-        System.out.println("  ID | FIRST NAME | LAST NAME | EXCESSIVE REPORTING LINES");
+        System.out.printf("%-12s|%-12s|%-12s|%-12s%n",
+                "ID",
+                "FIRST NAME",
+                "LAST NAME",
+                "EXCESSIVE REPORTING LINES");
 
         managerAndReportingLines.forEach(((employee, reportingLines) ->
-                System.out.printf(" %d |  %s  |  %s  |  %d  %n",
+                System.out.printf("%-12d|%-12s|%-12s|%-12d%n",
                         employee.id(),
                         employee.firstName(),
                         employee.lastName(),
