@@ -1,4 +1,4 @@
-package com.big.company.analytics.report;
+package com.big.company.analytics.services;
 
 import com.big.company.analytics.domain.Employee;
 import com.big.company.analytics.exception.EmployeeReportException;
