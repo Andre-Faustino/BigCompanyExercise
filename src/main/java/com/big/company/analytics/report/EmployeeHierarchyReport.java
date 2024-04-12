@@ -149,6 +149,14 @@ public class EmployeeHierarchyReport implements EmployeeReport {
         return managersWithPolicyViolation;
     }
 
+    /**
+     * Finds managers who violate the salary policy regarding their subordinates' average salary.
+     *
+     * @param employeeHierarchy  the root node of the employee hierarchy
+     * @param minimumPercentage  the minimum percentage by which a manager's salary should be more than the average salary of their subordinates
+     * @param maximumPercentage  the maximum percentage by which a manager's salary should be more than the average salary of their subordinates
+     * @return a map containing managers who violate the salary policy along with the violation description
+     */
     private Map<Employee, String> findManagersWithPolicyViolation(EmployeeNode employeeHierarchy, Integer minimumPercentage, Integer maximumPercentage) {
         Map<Employee, Double> managersAndAverage = new HashMap<>();
         getNodesSubordinatesSalaryAverage(employeeHierarchy, managersAndAverage);
@@ -170,6 +178,12 @@ public class EmployeeHierarchyReport implements EmployeeReport {
         return managersAndPolicyViolation;
     }
 
+    /**
+     * Calculates the average salary of subordinates for each manager node in the employee hierarchy.
+     *
+     * @param node    the current node in the employee hierarchy
+     * @param result  a map to store the manager node and its corresponding average salary of subordinates
+     */
     private static void getNodesSubordinatesSalaryAverage(EmployeeNode node, Map<Employee, Double> result) {
         if (node.subordinates().isEmpty()) return;
         Double average = node.subordinates().stream()
@@ -220,12 +234,27 @@ public class EmployeeHierarchyReport implements EmployeeReport {
         return managerAndReportingLines;
     }
 
+    /**
+     * Retrieves managers with reporting lines greater than a specified depth threshold.
+     *
+     * @param employeeHierarchy    the root node of the employee hierarchy
+     * @param depthThreshold       the threshold depth beyond which reporting lines are considered excessive
+     * @return a map containing managers with reporting lines greater than the depth threshold
+     */
     private Map<Employee, Integer> getNodesWithDepthGreaterThan(EmployeeNode employeeHierarchy, Integer depthThreshold) {
         Map<Employee, Integer> managerAndReportingLines = new HashMap<>();
         traverseDepthGreaterThan(employeeHierarchy, 0, depthThreshold, managerAndReportingLines);
         return managerAndReportingLines;
     }
 
+    /**
+     * Traverses the employee hierarchy to find managers with reporting lines greater than a specified depth threshold.
+     *
+     * @param node              the current node being traversed
+     * @param depth             the depth of the current node in the hierarchy
+     * @param depthThreshold    the threshold depth beyond which reporting lines are considered excessive
+     * @param result            a map to store managers with excessive reporting lines
+     */
     private void traverseDepthGreaterThan(EmployeeNode node, int depth, Integer depthThreshold, Map<Employee, Integer> result) {
         if (depth > depthThreshold) {
             result.put(node.employee(), depth - depthThreshold);

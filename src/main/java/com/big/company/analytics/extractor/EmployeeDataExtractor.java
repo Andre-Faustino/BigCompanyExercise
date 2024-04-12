@@ -111,11 +111,26 @@ public final class EmployeeDataExtractor implements FileExtractor<Employee> {
         return employees;
     }
 
+    /**
+     * Loads a file specified by path and filename.
+     *
+     * @param path     the path to the directory containing the file
+     * @param fileName the name of the file
+     * @return the loaded {@code File} object
+     */
     private static File loadFile(String path, String fileName) {
         String filePath = Paths.get(path, fileName).toString();
         return new File(filePath);
     }
 
+    /**
+     * Constructs an {@code Employee} object from an array of values representing employee data from a CSV line.
+     *
+     * @param values the array of values representing employee data
+     * @param line   the line number from which the data was extracted
+     * @return the constructed {@code Employee} object
+     * @throws ParseExtractionException if any error occurs during parsing of the employee data
+     */
     private static Employee employeeFromLineValues(String[] values, int line) {
         try {
             return new Employee(
@@ -130,6 +145,13 @@ public final class EmployeeDataExtractor implements FileExtractor<Employee> {
         }
     }
 
+    /**
+     * Creates a header mapper array to map CSV header columns to their respective positions
+     * described on {@code headerOrder}.
+     * @param header the array representing the header line of the CSV file
+     * @return the header mapper array
+     * @throws ParseExtractionException if any error occurs during parsing of the header
+     */
     private int[] createHeaderMapper(String[] header) throws ParseExtractionException {
         List<String> headerList = Arrays.stream(header).map(String::toLowerCase).toList();
         new HashSet<>(headerOrder).forEach(requiredHeader -> {
@@ -139,6 +161,13 @@ public final class EmployeeDataExtractor implements FileExtractor<Employee> {
         return headerList.stream().mapToInt(headerOrder::indexOf).toArray();
     }
 
+    /**
+     * Orders extracted data based on the header mapper array.
+     *
+     * @param headerMapper the header mapper array
+     * @param values       the array of values representing data from a CSV line
+     * @return the ordered data array
+     */
     private String[] orderExtractedData(int[] headerMapper, String[] values) {
         String[] orderedData = new String[values.length];
         for (int i = 0; i < values.length; i++) {
@@ -147,10 +176,24 @@ public final class EmployeeDataExtractor implements FileExtractor<Employee> {
         return orderedData;
     }
 
+    /**
+     * Gets an integer value from the array of values at the specified index.
+     *
+     * @param values the array of values
+     * @param index  the index from which to get the value
+     * @return the integer value at the specified index, or {@code null} if the index is out of bounds
+     */
     private static Integer getIntegerValue(String[] values, int index) {
         return (index < values.length) ? Integer.valueOf(values[index]) : null;
     }
 
+    /**
+     * Gets a string value from the array of values at the specified index.
+     *
+     * @param values the array of values
+     * @param index  the index from which to get the value
+     * @return the string value at the specified index, or {@code null} if the index is out of bounds
+     */
     private static String getStringValue(String[] values, int index) {
         return (index < values.length) ? values[index] : null;
     }
