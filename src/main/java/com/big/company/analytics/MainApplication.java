@@ -4,6 +4,7 @@ import com.big.company.analytics.domain.Employee;
 import com.big.company.analytics.exception.EmployeeReportException;
 import com.big.company.analytics.exception.FileExtractionException;
 import com.big.company.analytics.exception.ParseExtractionException;
+import com.big.company.analytics.exception.UnexpectedException;
 import com.big.company.analytics.extractor.EmployeeDataExtractor;
 import com.big.company.analytics.extractor.FileExtractor;
 import com.big.company.analytics.report.EmployeeHierarchyReport;
@@ -60,7 +61,7 @@ public class MainApplication {
             throw new ParseExtractionException(e.getMessage());
         } catch (Exception e) {
             System.out.println("ERROR : unexpected error");
-            throw new RuntimeException(e.getMessage());
+            throw new UnexpectedException(e.getMessage());
         }
     }
 
@@ -74,7 +75,7 @@ public class MainApplication {
             throw new EmployeeReportException(e.getMessage());
         } catch (Exception e) {
             System.out.println("ERROR : unexpected error");
-            throw new RuntimeException(e.getMessage());
+            throw new UnexpectedException(e.getMessage());
         }
     }
 }

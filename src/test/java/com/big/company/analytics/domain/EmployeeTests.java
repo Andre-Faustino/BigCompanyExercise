@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
-public class EmployeeTests {
+class EmployeeTests {
 
     @Test
     void shouldCreateEmployeeSuccessfully() {
@@ -20,11 +20,11 @@ public class EmployeeTests {
                 125
         );
 
-        assertEquals(employee.id(), 123);
-        assertEquals(employee.firstName(), "Joe");
-        assertEquals(employee.lastName(), "Doe");
-        assertEquals(employee.salary(), 45000);
-        assertEquals(employee.getManagerId(), Optional.of(125));
+        assertEquals(123, employee.id());
+        assertEquals("Joe", employee.firstName());
+        assertEquals("Doe", employee.lastName());
+        assertEquals(45000, employee.salary());
+        assertEquals(Optional.of(125), employee.getManagerId());
     }
 
     @Test

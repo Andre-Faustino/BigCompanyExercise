@@ -121,11 +121,11 @@ public class EmployeeHierarchyReport implements EmployeeReport {
         Objects.requireNonNull(minimumPercentage);
         Objects.requireNonNull(maximumPercentage);
 
-        EmployeeNode employeeHierarchy = this.employeeHierarchy;
-        if (employeeHierarchy == null)
+        EmployeeNode employees = this.employeeHierarchy;
+        if (employees == null)
             throw new EmployeeReportException("Employees list not set, should input employees before reports call");
 
-        Map<Employee, String> managersWithPolicyViolation = findManagersWithPolicyViolation(employeeHierarchy, minimumPercentage, maximumPercentage);
+        Map<Employee, String> managersWithPolicyViolation = findManagersWithPolicyViolation(employees, minimumPercentage, maximumPercentage);
 
         System.out.printf("----- Report of employees with salary policy violation -----%n");
         System.out.printf("-> Minimum percentage allowed: %d %n", minimumPercentage);
@@ -196,11 +196,11 @@ public class EmployeeHierarchyReport implements EmployeeReport {
     public Map<Employee, Integer> reportManagersWithExcessiveReportingLines(Integer reportingLinesThreshold) {
         Objects.requireNonNull(reportingLinesThreshold);
 
-        EmployeeNode employeeHierarchy = this.employeeHierarchy;
-        if (employeeHierarchy == null)
+        EmployeeNode employees = this.employeeHierarchy;
+        if (employees == null)
             throw new EmployeeReportException("Employees list not set, should input employees before reports call");
 
-        Map<Employee, Integer> managerAndReportingLines = getNodesWithDepthGreaterThan(employeeHierarchy, reportingLinesThreshold);
+        Map<Employee, Integer> managerAndReportingLines = getNodesWithDepthGreaterThan(employees, reportingLinesThreshold);
 
         System.out.printf("----- Report of employees with reporting line higher than %d -----%n", reportingLinesThreshold);
         System.out.printf("%-12s|%-12s|%-12s|%-12s%n",

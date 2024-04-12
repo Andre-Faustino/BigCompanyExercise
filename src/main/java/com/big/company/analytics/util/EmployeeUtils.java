@@ -4,12 +4,14 @@ import com.big.company.analytics.domain.Employee;
 import com.big.company.analytics.exception.EmployeeException;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * Utility class for operations related to employees.
  */
 public abstract class EmployeeUtils {
+
+    private EmployeeUtils() {
+    }
 
     /**
      * Finds the CEO (Chief Executive Officer) from a list of employees.

@@ -22,30 +22,30 @@ public final class EmployeeDataExtractor implements FileExtractor<Employee> {
     /**
      * The delimiter used in the CSV file.
      */
-    private final static String DELIMITER = ",";
+    private static final String DELIMITER = ",";
 
-    private final static List<String> headerOrder =
+    private static final List<String> headerOrder =
             Arrays.asList("id", "firstname", "lastname", "salary", "managerid");
 
     /**
      * Flag indicating whether the CSV file has a header line.
      */
-    private final Boolean has_header;
+    private final boolean hasHeader;
 
     /**
      * Constructs a new {@code EmployeeDataExtractor} with the specified value for whether the CSV file has a header line.
      *
-     * @param has_header {@code true} if the CSV file has a header line to be skipped, {@code false} otherwise
+     * @param hasHeader {@code true} if the CSV file has a header line to be skipped, {@code false} otherwise
      */
-    public EmployeeDataExtractor(Boolean has_header) {
-        this.has_header = has_header;
+    public EmployeeDataExtractor(Boolean hasHeader) {
+        this.hasHeader = hasHeader;
     }
 
     /**
      * Constructs a new {@code EmployeeDataExtractor} with default settings, assuming the CSV file has a header line.
      */
     public EmployeeDataExtractor() {
-        this.has_header = true;
+        this.hasHeader = true;
     }
 
     /**
@@ -85,21 +85,18 @@ public final class EmployeeDataExtractor implements FileExtractor<Employee> {
         ) {
             String line;
             int curLine = 0;
-            int[] header_mapper = new int[0];
+            int[] headerMapper = new int[0];
             while ((line = br.readLine()) != null) {
-                if (has_header && curLine == 0) {
-                    header_mapper = createHeaderMapper(line.split(DELIMITER));
+                if (hasHeader && curLine == 0) {
+                    headerMapper = createHeaderMapper(line.split(DELIMITER));
                     curLine++;
                     continue;
                 }
-                String[] values = (has_header)
-                        ? orderExtractedData(header_mapper, line.split(DELIMITER))
+                String[] values = (hasHeader)
+                        ? orderExtractedData(headerMapper, line.split(DELIMITER))
                         : line.split(DELIMITER);
-                try {
-                    employees.add(employeeFromLineValues(values));
-                } catch (Exception e) {
-                    throw new ParseExtractionException(String.format("Error on line %d -> %s", curLine, e.getMessage()));
-                }
+
+                employees.add(employeeFromLineValues(values, curLine));
                 curLine++;
             }
         } catch (FileNotFoundException e) {
@@ -119,14 +116,18 @@ public final class EmployeeDataExtractor implements FileExtractor<Employee> {
         return new File(filePath);
     }
 
-    private static Employee employeeFromLineValues(String[] values) {
-        return new Employee(
-                getIntegerValue(values, 0),
-                getStringValue(values, 1),
-                getStringValue(values, 2),
-                getIntegerValue(values, 3),
-                getIntegerValue(values, 4)
-        );
+    private static Employee employeeFromLineValues(String[] values, int line) {
+        try {
+            return new Employee(
+                    getIntegerValue(values, 0),
+                    getStringValue(values, 1),
+                    getStringValue(values, 2),
+                    getIntegerValue(values, 3),
+                    getIntegerValue(values, 4)
+            );
+        } catch (Exception e) {
+            throw new ParseExtractionException(String.format("Error on line %d -> %s", line, e.getMessage()));
+        }
     }
 
     private int[] createHeaderMapper(String[] header) throws ParseExtractionException {

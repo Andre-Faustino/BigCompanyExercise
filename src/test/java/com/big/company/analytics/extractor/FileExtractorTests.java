@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
 import static org.junit.jupiter.api.Assertions.*;
 import static com.big.company.analytics.test.util.AssertThrows.assertThrows;
 
-public class FileExtractorTests {
+class FileExtractorTests {
 
     private static final String TEST_FILEPATH = "src/test/resources/";
     FileExtractor<Employee> fileExtractor;
