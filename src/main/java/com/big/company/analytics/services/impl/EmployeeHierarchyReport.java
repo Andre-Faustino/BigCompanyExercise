@@ -1,10 +1,11 @@
-package com.big.company.analytics.report;
+package com.big.company.analytics.services.impl;
 
 import com.big.company.analytics.domain.Employee;
 import com.big.company.analytics.domain.EmployeeNode;
 import com.big.company.analytics.exception.EmployeeException;
 import com.big.company.analytics.exception.EmployeeNodeException;
 import com.big.company.analytics.exception.EmployeeReportException;
+import com.big.company.analytics.services.EmployeeReport;
 import com.big.company.analytics.util.EmployeeUtils;
 
 import java.util.*;

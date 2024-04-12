@@ -1,4 +1,4 @@
-package com.big.company.analytics.extractor;
+package com.big.company.analytics.services;
 
 import java.io.File;
 

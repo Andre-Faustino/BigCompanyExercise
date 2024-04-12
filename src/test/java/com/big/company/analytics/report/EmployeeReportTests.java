@@ -2,10 +2,12 @@ package com.big.company.analytics.report;
 
 import com.big.company.analytics.domain.Employee;
 import com.big.company.analytics.exception.EmployeeReportException;
-import com.big.company.analytics.extractor.EmployeeDataExtractor;
+import com.big.company.analytics.services.impl.EmployeeDataExtractor;
 
 import static com.big.company.analytics.test.util.AssertThrows.*;
 
+import com.big.company.analytics.services.EmployeeReport;
+import com.big.company.analytics.services.impl.EmployeeHierarchyReport;
 import com.big.company.analytics.test.util.AssertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

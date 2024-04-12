@@ -5,10 +5,10 @@ import com.big.company.analytics.exception.EmployeeReportException;
 import com.big.company.analytics.exception.FileExtractionException;
 import com.big.company.analytics.exception.ParseExtractionException;
 import com.big.company.analytics.exception.UnexpectedException;
-import com.big.company.analytics.extractor.EmployeeDataExtractor;
-import com.big.company.analytics.extractor.FileExtractor;
-import com.big.company.analytics.report.EmployeeHierarchyReport;
-import com.big.company.analytics.report.EmployeeReport;
+import com.big.company.analytics.services.impl.EmployeeDataExtractor;
+import com.big.company.analytics.services.FileExtractor;
+import com.big.company.analytics.services.impl.EmployeeHierarchyReport;
+import com.big.company.analytics.services.EmployeeReport;
 
 import java.io.File;
 import java.util.List;

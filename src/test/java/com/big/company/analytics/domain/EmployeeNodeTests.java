@@ -1,7 +1,7 @@
 package com.big.company.analytics.domain;
 
 import com.big.company.analytics.exception.EmployeeNodeException;
-import com.big.company.analytics.extractor.EmployeeDataExtractor;
+import com.big.company.analytics.services.impl.EmployeeDataExtractor;
 
 import static com.big.company.analytics.test.util.AssertThrows.*;
 

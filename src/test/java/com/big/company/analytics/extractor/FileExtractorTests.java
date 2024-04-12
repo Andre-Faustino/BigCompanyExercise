@@ -3,6 +3,8 @@ package com.big.company.analytics.extractor;
 import com.big.company.analytics.domain.Employee;
 import com.big.company.analytics.exception.FileExtractionException;
 import com.big.company.analytics.exception.ParseExtractionException;
+import com.big.company.analytics.services.FileExtractor;
+import com.big.company.analytics.services.impl.EmployeeDataExtractor;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
