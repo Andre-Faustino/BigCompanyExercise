@@ -96,7 +96,11 @@ public class EmployeeHierarchyReport implements EmployeeReport {
         return employees.stream()
                 .filter(employee -> {
                     if (employee.getManagerId().isEmpty()) return false;
-                    return ids.contains(employee.getManagerId().get());
+                    if (!ids.contains(employee.getManagerId().get())) {
+                        System.out.printf("Warning -> Removing employee with id %d due no manager id %d was found on the list%n", employee.id(), employee.getManagerId().get());
+                        return false;
+                    }
+                    return true;
                 })
                 .collect(Collectors.toCollection(ArrayDeque::new));
     }
