@@ -31,7 +31,7 @@ For running this application, you should only have java 11 installed.
 
 To compile the project:
 ```
-.\mvnw install</code>
+.\mvnw install
 ```
 To run the application you should provide a csv file with the employee list.
 You can specify the file location on <i>-Dfile</i> parameter when run the jar:
