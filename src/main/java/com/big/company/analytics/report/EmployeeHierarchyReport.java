@@ -42,7 +42,7 @@ public class EmployeeHierarchyReport implements EmployeeReport {
      * {@inheritDoc}
      */
     @Override
-    public Integer inputEmployees(List<Employee> employees) {
+    public synchronized Integer inputEmployees(List<Employee> employees) {
         if (employees == null) throw new EmployeeReportException("Employees list should not be null");
         try {
             Employee root = EmployeeUtils.findCEO(employees);
@@ -120,10 +120,12 @@ public class EmployeeHierarchyReport implements EmployeeReport {
     public Map<Employee, String> reportManagersSalaryPolicyViolation(Integer minimumPercentage, Integer maximumPercentage) {
         Objects.requireNonNull(minimumPercentage);
         Objects.requireNonNull(maximumPercentage);
+
+        EmployeeNode employeeHierarchy = this.employeeHierarchy;
         if (employeeHierarchy == null)
             throw new EmployeeReportException("Employees list not set, should input employees before reports call");
 
-        Map<Employee, String> managersWithPolicyViolation = findManagersWithPolicyViolation(minimumPercentage, maximumPercentage);
+        Map<Employee, String> managersWithPolicyViolation = findManagersWithPolicyViolation(employeeHierarchy, minimumPercentage, maximumPercentage);
 
         System.out.printf("----- Report of employees with salary policy violation -----%n");
         System.out.printf("-> Minimum percentage allowed: %d %n", minimumPercentage);
@@ -142,7 +144,7 @@ public class EmployeeHierarchyReport implements EmployeeReport {
         return managersWithPolicyViolation;
     }
 
-    private Map<Employee, String> findManagersWithPolicyViolation(Integer minimumPercentage, Integer maximumPercentage) {
+    private Map<Employee, String> findManagersWithPolicyViolation(EmployeeNode employeeHierarchy, Integer minimumPercentage, Integer maximumPercentage) {
         Map<Employee, Double> managersAndAverage = new HashMap<>();
         getNodesSubordinatesSalaryAverage(employeeHierarchy, managersAndAverage);
 
@@ -188,10 +190,12 @@ public class EmployeeHierarchyReport implements EmployeeReport {
     @Override
     public Map<Employee, Integer> reportManagersWithExcessiveReportingLines(Integer reportingLinesThreshold) {
         Objects.requireNonNull(reportingLinesThreshold);
+
+        EmployeeNode employeeHierarchy = this.employeeHierarchy;
         if (employeeHierarchy == null)
             throw new EmployeeReportException("Employees list not set, should input employees before reports call");
 
-        Map<Employee, Integer> managerAndReportingLines = getNodesWithDepthGreaterThan(reportingLinesThreshold);
+        Map<Employee, Integer> managerAndReportingLines = getNodesWithDepthGreaterThan(employeeHierarchy, reportingLinesThreshold);
 
         System.out.printf("----- Report of employees with reporting line higher than %d -----%n", reportingLinesThreshold);
         System.out.println("  ID | FIRST NAME | LAST NAME | EXCESSIVE REPORTING LINES");
@@ -204,10 +208,10 @@ public class EmployeeHierarchyReport implements EmployeeReport {
                         reportingLines)));
         System.out.println();
 
-        return getNodesWithDepthGreaterThan(reportingLinesThreshold);
+        return managerAndReportingLines;
     }
 
-    private Map<Employee, Integer> getNodesWithDepthGreaterThan(Integer depthThreshold) {
+    private Map<Employee, Integer> getNodesWithDepthGreaterThan(EmployeeNode employeeHierarchy, Integer depthThreshold) {
         Map<Employee, Integer> managerAndReportingLines = new HashMap<>();
         traverseDepthGreaterThan(employeeHierarchy, 0, depthThreshold, managerAndReportingLines);
         return managerAndReportingLines;

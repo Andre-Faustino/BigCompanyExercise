@@ -8,7 +8,8 @@ import java.util.Map;
 
 /**
  * The {@code EmployeeReport} interface provides methods for generating reports
- * related to employee analytics.
+ * related to employee analytics. The reports are designed to be thread-safe
+ * and can run concurrently without loss of data.
  */
 public interface EmployeeReport {
 
@@ -29,6 +30,7 @@ public interface EmployeeReport {
      * more than the average salary of its direct subordinates, but no more than the maximum percentage
      * than that average.
      * Needs {@code List<employees>} to input reported managers.
+     * Can run simultaneously with other reports.
      *
      * @param minimumPercentage the minimum allowed percentage increase in salary.
      * @param maximumPercentage the maximum allowed percentage increase in salary.
@@ -48,6 +50,8 @@ public interface EmployeeReport {
      * <br>The criteria is that each manager should have a salary at least a 20%
      * more than the average salary of its direct subordinates, but no more than the 50%
      * than that average.
+     * Can run simultaneously with other reports.
+     *
      * @return a map of the managers and the salary violation description
      * @throws EmployeeReportException if employees list is not set
      */
@@ -55,7 +59,7 @@ public interface EmployeeReport {
 
     /**
      * Generates a report printed in console on managers who have an excessive number of reporting lines until the ceo,
-     * exceeding the specified threshold.
+     * exceeding the specified threshold. Can run simultaneously with other reports.
      *
      * @param reportingLinesThreshold the maximum allowed number of reporting lines.
      * @return a map with managers and how much reporting lines higher than the threshold
@@ -66,7 +70,7 @@ public interface EmployeeReport {
 
     /**
      * Generates a report printed in console on managers who have an excessive number of reporting lines until the ceo,
-     * exceeding the standard threshold of 4.
+     * exceeding the standard threshold of 4. Can run simultaneously with other reports.
      *
      * @return a map with managers and how much reporting lines higher than 4
      * @throws EmployeeReportException if employees list is not set

@@ -10,8 +10,10 @@ import com.big.company.analytics.test.util.AssertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -98,5 +100,32 @@ class EmployeeReportTests {
 
         assertTrue(managers.containsKey(mockedEmp));
         assertEquals(1, managers.get(mockedEmp));
+    }
+
+    @Test
+    void shouldReportConcurrentlyWithThreadSafeEmployeeHierarchy() {
+        EmployeeReport report = new EmployeeHierarchyReport();
+        report.inputEmployees(employees);
+
+        List<CompletableFuture> futures = new ArrayList<>();
+        List<Employee> newEmployees = new ArrayList<>();
+
+        newEmployees.add(new Employee(123, "Joe", "Doe", 60000, null));
+        newEmployees.add(new Employee(124, "Martin", "Chekov", 45000, 123));
+        newEmployees.add(new Employee(125, "Bob", "Ronstad", 47000, 124));
+        newEmployees.add(new Employee(126, "Alice", "Hasacat", 50000, 125));
+        newEmployees.add(new Employee(127, "Brett", "Hardleaf", 34000, 126));
+
+        futures.add(
+                CompletableFuture.supplyAsync(report::reportManagersSalaryPolicyViolation)
+                        .thenAccept(managers -> assertEquals(60, managers.size())));
+        futures.add(
+                CompletableFuture.supplyAsync(report::reportManagersWithExcessiveReportingLines)
+                        .thenAccept(managers -> assertEquals(65, managers.size())));
+        futures.add(
+                CompletableFuture.supplyAsync(() -> report.inputEmployees(newEmployees))
+                        .thenApply(managers -> report.reportManagersWithExcessiveReportingLines(2))
+                        .thenAccept(managers -> assertEquals(2, managers.size())));
+        futures.forEach(CompletableFuture::join);
     }
 }
