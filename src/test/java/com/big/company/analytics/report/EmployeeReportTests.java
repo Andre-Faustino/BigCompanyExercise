@@ -107,7 +107,7 @@ class EmployeeReportTests {
         EmployeeReport report = new EmployeeHierarchyReport();
         report.inputEmployees(employees);
 
-        List<CompletableFuture> futures = new ArrayList<>();
+        List<CompletableFuture<?>> futures = new ArrayList<>();
         List<Employee> newEmployees = new ArrayList<>();
 
         newEmployees.add(new Employee(123, "Joe", "Doe", 60000, null));
