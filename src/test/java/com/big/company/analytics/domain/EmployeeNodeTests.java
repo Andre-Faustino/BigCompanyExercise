@@ -45,6 +45,7 @@ class EmployeeNodeTests {
                 .subordinates().get(0)
                 .subordinates().get(0)
                 .employee().id());
+        assertEquals(5, employeeNode.size());
     }
 
     @Test

@@ -82,4 +82,17 @@ public record EmployeeNode(
         }
         return false;
     }
+
+    /**
+     * Gets the size of the hierarchy rooted at this node.
+     *
+     * @return The size of the hierarchy.
+     */
+    public int size() {
+        int size = 1;
+        for (EmployeeNode subordinate : subordinates) {
+            size += subordinate.size();
+        }
+        return size;
+    }
 }
