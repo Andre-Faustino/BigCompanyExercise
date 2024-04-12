@@ -92,15 +92,11 @@ public class EmployeeHierarchyReport implements EmployeeReport {
      * @return a deque of valid employees
      */
     private Deque<Employee> removeEmployeesWithoutValidManagers(List<Employee> employees) {
+        Set<Integer> ids = new HashSet<>(employees.stream().map(Employee::id).toList());
         return employees.stream()
                 .filter(employee -> {
                     if (employee.getManagerId().isEmpty()) return false;
-                    for (Employee lookup : employees) {
-                        if (employee.getManagerId().get().equals(lookup.id())) {
-                            return true;
-                        }
-                    }
-                    return false;
+                    return ids.contains(employee.getManagerId().get());
                 })
                 .collect(Collectors.toCollection(ArrayDeque::new));
     }
