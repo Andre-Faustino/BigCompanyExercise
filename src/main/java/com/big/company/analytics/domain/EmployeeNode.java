@@ -45,7 +45,7 @@ public record EmployeeNode(
      * If the manager of the {@code employeeToAdd} is not found in the hierarchy,
      * it returns false. In this case, it's important to note that the order in which employees
      * are added may affect this operation. The functionality for handling unordered
-     * collections should be considered for future extensions.
+     * collections should be treated before.
      *
      * @param employeeToAdd The employee to add.
      * @return true if the employee was successfully added, false if the manager was not found.
@@ -56,17 +56,28 @@ public record EmployeeNode(
         Integer managerId = employeeToAdd.getManagerId()
                 .orElseThrow(() -> new EmployeeNodeException("Employee doesn't have a manager"));
 
-        return addEmployee(employeeToAdd, managerId);
+        return addEmployeeRecursively(employeeToAdd, managerId);
     }
 
-    private boolean addEmployee(Employee employeeToAdd, Integer managerId) {
+    /**
+     * Adds an employee to the hierarchy as a subordinate of its manager.
+     * If the manager of the {@code employeeToAdd} is not found in the hierarchy,
+     * it returns false. In this case, it's important to note that the order in which employees
+     * are added may affect this operation. The functionality for handling unordered
+     * collections should be treated before.
+     *
+     * @param employeeToAdd The employee to add. Must not be null.
+     * @param managerId     Manager id of the employee to be added. Must not be null.
+     * @return true if the employee was successfully added, false if the manager was not found.
+     */
+    private boolean addEmployeeRecursively(Employee employeeToAdd, Integer managerId) {
         if (managerId.equals(employee.id())) {
             EmployeeNode employeeNode = new EmployeeNode(employeeToAdd);
             subordinates.add(employeeNode);
             return true;
         } else {
             for (EmployeeNode subordinate : subordinates) {
-                if (subordinate.addEmployee(employeeToAdd, managerId)) return true;
+                if (subordinate.addEmployeeRecursively(employeeToAdd, managerId)) return true;
             }
         }
         return false;
