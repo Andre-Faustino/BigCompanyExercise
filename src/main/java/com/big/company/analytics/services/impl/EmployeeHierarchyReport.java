@@ -49,8 +49,22 @@ public class EmployeeHierarchyReport implements EmployeeReport {
         if (employeeHierarchy == null)
             throw new NullPointerException("Employees hierarchy must not be null");
 
-        Map<Employee, String> managersWithPolicyViolation = findManagersWithPolicyViolation(employeeHierarchy, minimumPercentage, maximumPercentage);
+        Map<Employee, String> managersWithPolicyViolation =
+                findManagersWithPolicyViolation(employeeHierarchy, minimumPercentage, maximumPercentage);
+        printReportManagersSalaryPolicyViolation(managersWithPolicyViolation, minimumPercentage, maximumPercentage);
 
+        return managersWithPolicyViolation;
+    }
+
+    /**
+     * Prints a report of managers who violate the salary policy regarding their subordinates' average salary.
+     * This method prints the details of managers with their corresponding violation descriptions.
+     *
+     * @param managersWithPolicyViolation a map containing managers who violate the salary policy along with the violation description
+     * @param minimumPercentage           the minimum percentage by which a manager's salary should be more than the average salary of their subordinates
+     * @param maximumPercentage           the maximum percentage by which a manager's salary should be more than the average salary of their subordinates
+     */
+    private synchronized void printReportManagersSalaryPolicyViolation(Map<Employee, String> managersWithPolicyViolation, Integer minimumPercentage, Integer maximumPercentage) {
         System.out.printf("----- Report of employees with salary policy violation -----%n");
         System.out.printf("-> Minimum percentage allowed: %d %n", minimumPercentage);
         System.out.printf("-> Maximum percentage allowed: %d %n", maximumPercentage);
@@ -69,16 +83,14 @@ public class EmployeeHierarchyReport implements EmployeeReport {
                         employee.salary(),
                         violationDescr));
         System.out.println();
-
-        return managersWithPolicyViolation;
     }
 
     /**
      * Finds managers who violate the salary policy regarding their subordinates' average salary.
      *
-     * @param employeeHierarchy  the root node of the employee hierarchy
-     * @param minimumPercentage  the minimum percentage by which a manager's salary should be more than the average salary of their subordinates
-     * @param maximumPercentage  the maximum percentage by which a manager's salary should be more than the average salary of their subordinates
+     * @param employeeHierarchy the root node of the employee hierarchy
+     * @param minimumPercentage the minimum percentage by which a manager's salary should be more than the average salary of their subordinates
+     * @param maximumPercentage the maximum percentage by which a manager's salary should be more than the average salary of their subordinates
      * @return a map containing managers who violate the salary policy along with the violation description
      */
     private Map<Employee, String> findManagersWithPolicyViolation(EmployeeNode employeeHierarchy, Integer minimumPercentage, Integer maximumPercentage) {
@@ -105,8 +117,8 @@ public class EmployeeHierarchyReport implements EmployeeReport {
     /**
      * Calculates the average salary of subordinates for each manager node in the employee hierarchy.
      *
-     * @param node    the current node in the employee hierarchy
-     * @param result  a map to store the manager node and its corresponding average salary of subordinates
+     * @param node   the current node in the employee hierarchy
+     * @param result a map to store the manager node and its corresponding average salary of subordinates
      */
     private static void getNodesSubordinatesSalaryAverage(EmployeeNode node, Map<Employee, Double> result) {
         if (node.subordinates().isEmpty()) return;
@@ -138,7 +150,19 @@ public class EmployeeHierarchyReport implements EmployeeReport {
             throw new NullPointerException("Employees hierarchy must not be null");
 
         Map<Employee, Integer> managerAndReportingLines = getNodesWithDepthGreaterThan(employeeHierarchy, reportingLinesThreshold);
+        printReportManagersWithExcessiveReportingLines(managerAndReportingLines, reportingLinesThreshold);
 
+        return managerAndReportingLines;
+    }
+
+    /**
+     * Prints a report of managers with excessive reporting lines.
+     * This method prints the details of managers along with the number of reporting lines exceeding the specified threshold.
+     *
+     * @param managerAndReportingLines   a map containing managers with reporting lines greater than the depth threshold
+     * @param reportingLinesThreshold    the threshold depth beyond which reporting lines are considered excessive
+     */
+    private synchronized void printReportManagersWithExcessiveReportingLines(Map<Employee, Integer> managerAndReportingLines, Integer reportingLinesThreshold) {
         System.out.printf("----- Report of employees with reporting line higher than %d -----%n", reportingLinesThreshold);
         System.out.printf("%-12s|%-12s|%-12s|%-12s%n",
                 "ID",
@@ -153,15 +177,14 @@ public class EmployeeHierarchyReport implements EmployeeReport {
                         employee.lastName(),
                         reportingLines)));
         System.out.println();
-
-        return managerAndReportingLines;
     }
+
 
     /**
      * Retrieves managers with reporting lines greater than a specified depth threshold.
      *
-     * @param employeeHierarchy    the root node of the employee hierarchy
-     * @param depthThreshold       the threshold depth beyond which reporting lines are considered excessive
+     * @param employeeHierarchy the root node of the employee hierarchy
+     * @param depthThreshold    the threshold depth beyond which reporting lines are considered excessive
      * @return a map containing managers with reporting lines greater than the depth threshold
      */
     private Map<Employee, Integer> getNodesWithDepthGreaterThan(EmployeeNode employeeHierarchy, Integer depthThreshold) {
@@ -173,10 +196,10 @@ public class EmployeeHierarchyReport implements EmployeeReport {
     /**
      * Traverses the employee hierarchy to find managers with reporting lines greater than a specified depth threshold.
      *
-     * @param node              the current node being traversed
-     * @param depth             the depth of the current node in the hierarchy
-     * @param depthThreshold    the threshold depth beyond which reporting lines are considered excessive
-     * @param result            a map to store managers with excessive reporting lines
+     * @param node           the current node being traversed
+     * @param depth          the depth of the current node in the hierarchy
+     * @param depthThreshold the threshold depth beyond which reporting lines are considered excessive
+     * @param result         a map to store managers with excessive reporting lines
      */
     private void traverseDepthGreaterThan(EmployeeNode node, int depth, Integer depthThreshold, Map<Employee, Integer> result) {
         if (depth > depthThreshold) {

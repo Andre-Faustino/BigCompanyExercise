@@ -11,8 +11,11 @@ import com.big.company.analytics.services.impl.EmployeeNodeGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -82,5 +85,18 @@ class EmployeeReportTests {
                 () -> report.reportManagersSalaryPolicyViolation(employeesHierarchy, 25, null));
         assertThrows("Reporting lines threshold must not be null", NullPointerException.class,
                 () -> report.reportManagersWithExcessiveReportingLines(employeesHierarchy, null));
+    }
+
+    @Test
+    void shouldRunReportsConcurrently() {
+        this.employees = new EmployeeDataExtractor().extractFile(TEST_FILEPATH, "HugeData.csv");
+        EmployeeNode employeesHierarchy = nodeService.getEmployeesHierarchy(employees);
+
+        Arrays.asList(
+                CompletableFuture.supplyAsync(() -> report.reportManagersSalaryPolicyViolation(employeesHierarchy))
+                        .thenAccept(employees -> assertEquals(966, employees.size())),
+                CompletableFuture.supplyAsync(() -> report.reportManagersWithExcessiveReportingLines(employeesHierarchy))
+                        .thenAccept(employees -> assertEquals(2779, employees.size()))
+        ).forEach(CompletableFuture::join);
     }
 }
