@@ -28,7 +28,7 @@ public class MainApplication {
         System.out.println();
         System.out.println("Init extraction of employees from file");
 
-        FileExtractor<Employee> extractor = new EmployeeDataExtractor();
+        FileExtractor<Employee> extractor = getFileExtractor();
         List<Employee> employees = extractEmployeesFromFile(extractor, csvFile);
 
         System.out.println("Extraction successfully done!");
@@ -50,6 +50,7 @@ public class MainApplication {
         System.out.println("=========== FINISHING ANALYTICS REPORTS ===========");
     }
 
+
     private static File getFile() {
         String filePath = System.getProperty("file");
         if (filePath == null) {
@@ -58,6 +59,18 @@ public class MainApplication {
         }
         System.out.printf("Loading file: %s%n", filePath);
         return new File(filePath);
+    }
+
+    private static FileExtractor<Employee> getFileExtractor() {
+        String hasHeader = System.getProperty("has_header");
+        if (hasHeader == null || (!hasHeader.equalsIgnoreCase("true") && !hasHeader.equalsIgnoreCase("false"))) {
+            System.out.println("WARNING -> The 'has_header' property is not set to 'true' or 'false'. Using default configuration: expecting a file with a header.");
+            return new EmployeeDataExtractor();
+        }
+
+        boolean expectHeader = Boolean.parseBoolean(hasHeader);
+        System.out.println("DataExtractor -> Using user configuration: Expect file with " + (expectHeader ? "header" : "NO header"));
+        return new EmployeeDataExtractor(expectHeader);
     }
 
     private static List<Employee> extractEmployeesFromFile(FileExtractor<Employee> extractor, File csvFile) {

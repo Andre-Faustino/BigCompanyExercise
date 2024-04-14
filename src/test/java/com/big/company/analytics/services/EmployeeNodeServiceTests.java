@@ -9,11 +9,13 @@ import com.big.company.analytics.test.util.AssertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
+import java.util.stream.Stream;
 
 import static com.big.company.analytics.test.util.AssertThrows.assertThrows;
 import static org.junit.jupiter.api.Assertions.*;
@@ -56,9 +58,9 @@ class EmployeeNodeServiceTests {
                 () -> nodeService.getEmployeesHierarchy(employees));
     }
 
-    private static List<Object[]> provideEmployeeLists() {
-        return Arrays.asList(new Object[][]{
-                {
+    private static Stream provideEmployeeLists() {
+        return Stream.of(
+                Arguments.of(
                         Arrays.asList(
                                 new Employee(123, "Joe", "Doe", 60000, null),
                                 new Employee(124, "Martin", "Chekov", 45000, 123),
@@ -67,8 +69,8 @@ class EmployeeNodeServiceTests {
                                 new Employee(305, "Brett", "Hardleaf", 34000, 300)
                         ),
                         5
-                },
-                {
+                ),
+                Arguments.of(
                         Arrays.asList(
                                 new Employee(123, "Joe", "Doe", 60000, null),
                                 new Employee(124, "Martin", "Chekov", 45000, 123),
@@ -76,8 +78,8 @@ class EmployeeNodeServiceTests {
                                 new Employee(300, "Alice", "Hasacat", 50000, 124)
                         ),
                         4
-                },
-                {
+                ),
+                Arguments.of(
                         Arrays.asList(
                                 new Employee(123, "Joe", "Doe", 60000, null),
                                 new Employee(124, "Martin", "Chekov", 45000, 123),
@@ -87,8 +89,8 @@ class EmployeeNodeServiceTests {
                                 new Employee(306, "John", "Petrucci", 66000, 305)
                         ),
                         6
-                }
-        });
+                )
+        );
     }
 
     @ParameterizedTest

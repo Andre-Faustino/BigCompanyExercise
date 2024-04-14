@@ -102,10 +102,10 @@ public final class EmployeeDataExtractor implements FileExtractor<Employee> {
             }
         } catch (FileNotFoundException e) {
             throw new FileExtractionException(
-                    String.format("File not found | Filepath: %s | Filename: %s", file.getPath(), file.getName()));
+                    String.format("File not found | Filepath: %s | Filename: %s", Optional.ofNullable(file.getParent()).orElse("/"), file.getName()));
         } catch (SecurityException e) {
             throw new FileExtractionException(
-                    String.format("File reading not permitted | Filepath: %s | Filename: %s", file.getPath(), file.getName()));
+                    String.format("File reading not permitted | Filepath: %s | Filename: %s", Optional.ofNullable(file.getParent()).orElse("/"), file.getName()));
         } catch (IOException e) {
             throw new FileExtractionException("Error when reading the file");
         }

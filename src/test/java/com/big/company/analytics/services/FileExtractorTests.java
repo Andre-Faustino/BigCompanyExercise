@@ -41,7 +41,7 @@ class FileExtractorTests {
 
     @Test
     void shouldFailWhenFileNotExistParameters() {
-        assertThrows("File not found | Filepath: this\\path\\not\\exist\\NoFile | Filename: NoFile", FileExtractionException.class,
+        assertThrows("File not found | Filepath: this\\path\\not\\exist | Filename: NoFile", FileExtractionException.class,
                 () -> fileExtractor.extractFile("this/path/not/exist", "NoFile"));
     }
 
