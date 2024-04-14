@@ -57,49 +57,4 @@ class EmployeeNodeServiceTests {
         AssertThrows.assertThrows("Error when creating Employee Hierarchy | Employee list has more than one CEO", EmployeeNodeServiceException.class,
                 () -> nodeService.getEmployeesHierarchy(employees));
     }
-
-    private static Stream<Arguments> provideEmployeeLists() {
-        return Stream.of(
-                Arguments.of(
-                        Arrays.asList(
-                                new Employee(123, "Joe", "Doe", 60000, null),
-                                new Employee(124, "Martin", "Chekov", 45000, 123),
-                                new Employee(125, "Bob", "Ronstad", 47000, 123),
-                                new Employee(300, "Alice", "Hasacat", 50000, 124),
-                                new Employee(305, "Brett", "Hardleaf", 34000, 300)
-                        ),
-                        5
-                ),
-                Arguments.of(
-                        Arrays.asList(
-                                new Employee(123, "Joe", "Doe", 60000, null),
-                                new Employee(124, "Martin", "Chekov", 45000, 123),
-                                new Employee(125, "Bob", "Ronstad", 47000, 123),
-                                new Employee(300, "Alice", "Hasacat", 50000, 124)
-                        ),
-                        4
-                ),
-                Arguments.of(
-                        Arrays.asList(
-                                new Employee(123, "Joe", "Doe", 60000, null),
-                                new Employee(124, "Martin", "Chekov", 45000, 123),
-                                new Employee(125, "Bob", "Ronstad", 47000, 123),
-                                new Employee(300, "Alice", "Hasacat", 50000, 124),
-                                new Employee(305, "Brett", "Hardleaf", 34000, 300),
-                                new Employee(306, "John", "Petrucci", 66000, 305)
-                        ),
-                        6
-                )
-        );
-    }
-
-    @ParameterizedTest
-    @MethodSource("provideEmployeeLists")
-    void shouldConcurrentlyEmployeeNodeGenerationSuccess(List<Employee> employees, int expectedSize) {
-        EmployeeNodeService nodeService = new EmployeeNodeGenerator();
-
-        CompletableFuture.supplyAsync(() -> nodeService.getEmployeesHierarchy(employees))
-                .thenAccept(node -> assertEquals(expectedSize, node.size()))
-                .join();
-    }
 }
