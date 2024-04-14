@@ -22,6 +22,7 @@ public interface EmployeeReport {
      * @param minimumPercentage the minimum allowed percentage increase in salary.
      * @param maximumPercentage the maximum allowed percentage increase in salary.
      * @return a map of the managers and the salary violation description
+     * @throws NullPointerException if any params is null
      */
     Map<Employee, String> reportManagersSalaryPolicyViolation(EmployeeNode employeeHierarchy, Integer minimumPercentage, Integer maximumPercentage);
 
@@ -38,6 +39,7 @@ public interface EmployeeReport {
      *
      * @param employeeHierarchy the root of the employee hierarchy
      * @return a map of the managers and the salary violation description
+     * @throws NullPointerException if any params is null
      */
     Map<Employee, String> reportManagersSalaryPolicyViolation(EmployeeNode employeeHierarchy);
 

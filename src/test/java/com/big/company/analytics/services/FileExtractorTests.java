@@ -27,11 +27,14 @@ class FileExtractorTests {
 
     @Test
     void shouldFailWhenExtractFileWithWrongParameters() {
-        assertThrows("File should not be null", FileExtractionException.class,
+        assertThrows("File should not be null", NullPointerException.class,
                 () -> fileExtractor.extractFile(null));
 
-        assertThrows("Path and filename should not be null", FileExtractionException.class,
+        assertThrows("Path should not be null", NullPointerException.class,
                 () -> fileExtractor.extractFile(null, null));
+
+        assertThrows("File name should not be null", NullPointerException.class,
+                () -> fileExtractor.extractFile("valid/path", null));
 
         assertThrows("Path and filename should not be blank", FileExtractionException.class,
                 () -> fileExtractor.extractFile("", ""));

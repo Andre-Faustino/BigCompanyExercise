@@ -7,10 +7,7 @@ import com.big.company.analytics.services.FileExtractor;
 
 import java.io.*;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 /**
  * An implementation of {@code FileExtractor} for extracting {@code Employee} objects from a CSV file
@@ -57,10 +54,12 @@ public final class EmployeeDataExtractor implements FileExtractor<Employee> {
      * @return a list of {@code Employee} objects extracted from the CSV file
      * @throws FileExtractionException  if the file is not found or cannot be loaded
      * @throws ParseExtractionException if any error occurs during parsing of the file content
+     * @throws NullPointerException     if any params is null
      */
     @Override
     public List<Employee> extractFile(String path, String fileName) {
-        if (path == null || fileName == null) throw new FileExtractionException("Path and filename should not be null");
+        Objects.requireNonNull(path, "Path should not be null");
+        Objects.requireNonNull(fileName, "File name should not be null");
         if (path.isBlank() || fileName.isBlank())
             throw new FileExtractionException("Path and filename should not be blank");
 
@@ -74,10 +73,11 @@ public final class EmployeeDataExtractor implements FileExtractor<Employee> {
      * @return a list of {@code Employee} objects extracted from the CSV file
      * @throws FileExtractionException  if the file is not found or cannot be loaded
      * @throws ParseExtractionException if any error occurs during parsing of the file content
+     * @throws NullPointerException     if any params is null
      */
     @Override
     public List<Employee> extractFile(File file) {
-        if (file == null) throw new FileExtractionException("File should not be null");
+        Objects.requireNonNull(file, "File should not be null");
 
         List<Employee> employees = new ArrayList<>();
         try (
@@ -149,6 +149,7 @@ public final class EmployeeDataExtractor implements FileExtractor<Employee> {
     /**
      * Creates a header mapper array to map CSV header columns to their respective positions
      * described on {@code headerOrder}.
+     *
      * @param header the array representing the header line of the CSV file
      * @return the header mapper array
      * @throws ParseExtractionException if any error occurs during parsing of the header

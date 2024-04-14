@@ -20,8 +20,9 @@ public interface FileExtractor<T> {
      * @param path     the path to the directory containing the file
      * @param fileName the name of the file
      * @return a list of elements of type <b>T</b> extracted from the file
-     * @throws FileExtractionException if the file is not found or cannot be loaded
+     * @throws FileExtractionException  if the file is not found or cannot be loaded
      * @throws ParseExtractionException if any error occurs during parsing of the file content
+     * @throws NullPointerException     if any params is null
      */
     List<T> extractFile(String path, String fileName);
 
@@ -30,8 +31,9 @@ public interface FileExtractor<T> {
      *
      * @param file the file object from which to extract <b>T</b> objects
      * @return a list of elements of type <b>T</b> extracted from the file
-     * @throws FileExtractionException if the file is not found or cannot be loaded
+     * @throws FileExtractionException  if the file is not found or cannot be loaded
      * @throws ParseExtractionException if any error occurs during parsing of the file content
+     * @throws NullPointerException     if any params is null
      */
     List<T> extractFile(File file);
 }
