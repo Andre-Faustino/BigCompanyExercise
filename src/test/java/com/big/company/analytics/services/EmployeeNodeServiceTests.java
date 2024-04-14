@@ -58,7 +58,7 @@ class EmployeeNodeServiceTests {
                 () -> nodeService.getEmployeesHierarchy(employees));
     }
 
-    private static Stream provideEmployeeLists() {
+    private static Stream<Arguments> provideEmployeeLists() {
         return Stream.of(
                 Arguments.of(
                         Arrays.asList(
