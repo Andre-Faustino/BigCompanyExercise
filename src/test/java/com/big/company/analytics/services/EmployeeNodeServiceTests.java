@@ -3,7 +3,7 @@ package com.big.company.analytics.services;
 import com.big.company.analytics.domain.Employee;
 import com.big.company.analytics.domain.EmployeeNode;
 import com.big.company.analytics.exception.EmployeeNodeServiceException;
-import com.big.company.analytics.services.impl.EmployeeDataExtractor;
+import com.big.company.analytics.services.impl.EmployeeDataExtractorService;
 import com.big.company.analytics.services.impl.EmployeeNodeGenerator;
 import com.big.company.analytics.test.util.AssertThrows;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +22,7 @@ class EmployeeNodeServiceTests {
 
     @BeforeEach
     void init() {
-        this.employees = new EmployeeDataExtractor().extractFile(TEST_FILEPATH, TEST_FILENAME);
+        this.employees = new EmployeeDataExtractorService().extractFile(TEST_FILEPATH, TEST_FILENAME);
     }
 
     @Test
@@ -34,7 +34,7 @@ class EmployeeNodeServiceTests {
 
     @Test
     void shouldGetEmployeesHierarchyWithUnorderedListSuccessfully() {
-        List<Employee> unorderedEmployees = new EmployeeDataExtractor().extractFile(TEST_FILEPATH, "UnorderedData.csv");
+        List<Employee> unorderedEmployees = new EmployeeDataExtractorService().extractFile(TEST_FILEPATH, "UnorderedData.csv");
         EmployeeNodeService nodeService = new EmployeeNodeGenerator();
         assertEquals(5, nodeService.getEmployeesHierarchy(unorderedEmployees).size());
     }

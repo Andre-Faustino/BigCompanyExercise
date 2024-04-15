@@ -2,7 +2,7 @@ package com.big.company.analytics.services.impl;
 
 import com.big.company.analytics.domain.Employee;
 import com.big.company.analytics.domain.EmployeeNode;
-import com.big.company.analytics.services.EmployeeReport;
+import com.big.company.analytics.services.EmployeeReportService;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
  * Implementation of the {@code EmployeeReport} interface that generates reports based on
  * the hierarchy (N-tree) of employees.
  */
-public class EmployeeHierarchyReport implements EmployeeReport {
+public class EmployeeHierarchyReportService implements EmployeeReportService {
 
     /**
      * Default threshold value for reporting lines be considered excessive.

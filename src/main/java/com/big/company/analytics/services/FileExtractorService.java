@@ -12,7 +12,7 @@ import java.util.List;
  *
  * @param <T> the type of elements to be extracted
  */
-public interface FileExtractor<T> {
+public interface FileExtractorService<T> {
 
     /**
      * Extracts elements from a file specified by path and filename.

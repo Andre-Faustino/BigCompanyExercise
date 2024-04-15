@@ -3,7 +3,7 @@ package com.big.company.analytics.services.impl;
 import com.big.company.analytics.domain.Employee;
 import com.big.company.analytics.exception.FileExtractionException;
 import com.big.company.analytics.exception.ParseExtractionException;
-import com.big.company.analytics.services.FileExtractor;
+import com.big.company.analytics.services.FileExtractorService;
 
 import java.io.*;
 import java.nio.file.Paths;
@@ -15,7 +15,7 @@ import java.util.*;
  * <p>
  * This implementation assumes that the CSV file has a header line that needs to be skipped.
  */
-public final class EmployeeDataExtractor implements FileExtractor<Employee> {
+public final class EmployeeDataExtractorService implements FileExtractorService<Employee> {
 
     /**
      * The delimiter used in the CSV file.
@@ -35,14 +35,14 @@ public final class EmployeeDataExtractor implements FileExtractor<Employee> {
      *
      * @param hasHeader {@code true} if the CSV file has a header line to be skipped, {@code false} otherwise
      */
-    public EmployeeDataExtractor(Boolean hasHeader) {
+    public EmployeeDataExtractorService(Boolean hasHeader) {
         this.hasHeader = hasHeader;
     }
 
     /**
      * Constructs a new {@code EmployeeDataExtractor} with default settings, assuming the CSV file has a header line.
      */
-    public EmployeeDataExtractor() {
+    public EmployeeDataExtractorService() {
         this.hasHeader = true;
     }
 

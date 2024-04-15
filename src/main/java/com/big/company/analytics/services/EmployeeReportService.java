@@ -9,7 +9,7 @@ import java.util.Map;
  * The {@code EmployeeReport} interface provides methods for generating reports
  * related to employee analytics.
  */
-public interface EmployeeReport {
+public interface EmployeeReportService {
 
     /**
      * Generates a report printed in console on managers who violate the salary policy by falling outside

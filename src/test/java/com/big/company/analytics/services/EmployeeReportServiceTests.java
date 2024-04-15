@@ -2,11 +2,11 @@ package com.big.company.analytics.services;
 
 import com.big.company.analytics.domain.Employee;
 import com.big.company.analytics.domain.EmployeeNode;
-import com.big.company.analytics.services.impl.EmployeeDataExtractor;
+import com.big.company.analytics.services.impl.EmployeeDataExtractorService;
 
 import static com.big.company.analytics.test.util.AssertThrows.*;
 
-import com.big.company.analytics.services.impl.EmployeeHierarchyReport;
+import com.big.company.analytics.services.impl.EmployeeHierarchyReportService;
 import com.big.company.analytics.services.impl.EmployeeNodeGenerator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -18,24 +18,24 @@ import java.util.concurrent.CompletableFuture;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class EmployeeReportTests {
+class EmployeeReportServiceTests {
 
     private static final String TEST_FILEPATH = "src/test/resources/";
     private static final String TEST_FILENAME = "SampleData.csv";
     List<Employee> employees;
     EmployeeNodeService nodeService;
-    EmployeeReport report;
+    EmployeeReportService report;
 
     @BeforeEach
     void init() {
-        this.employees = new EmployeeDataExtractor().extractFile(TEST_FILEPATH, TEST_FILENAME);
+        this.employees = new EmployeeDataExtractorService().extractFile(TEST_FILEPATH, TEST_FILENAME);
         this.nodeService = new EmployeeNodeGenerator();
-        this.report = new EmployeeHierarchyReport();
+        this.report = new EmployeeHierarchyReportService();
     }
 
     @Test
     void shouldReportManagersWithSalaryPolicyViolation() {
-        this.employees = new EmployeeDataExtractor().extractFile(TEST_FILEPATH, "SalaryViolationPolicyData.csv");
+        this.employees = new EmployeeDataExtractorService().extractFile(TEST_FILEPATH, "SalaryViolationPolicyData.csv");
         EmployeeNode employeesHierarchy = nodeService.getEmployeesHierarchy(employees);
 
         Map<Employee, String> managers = report.reportManagersSalaryPolicyViolation(employeesHierarchy);
@@ -88,7 +88,7 @@ class EmployeeReportTests {
 
     @Test
     void shouldRunReportsConcurrently() {
-        this.employees = new EmployeeDataExtractor().extractFile(TEST_FILEPATH, "HugeData.csv");
+        this.employees = new EmployeeDataExtractorService().extractFile(TEST_FILEPATH, "HugeData.csv");
         EmployeeNode employeesHierarchy = nodeService.getEmployeesHierarchy(employees);
 
         Arrays.asList(

@@ -6,10 +6,10 @@ import com.big.company.analytics.exception.FileExtractionException;
 import com.big.company.analytics.exception.ParseExtractionException;
 import com.big.company.analytics.exception.UnexpectedException;
 import com.big.company.analytics.services.EmployeeNodeService;
-import com.big.company.analytics.services.impl.EmployeeDataExtractor;
-import com.big.company.analytics.services.FileExtractor;
-import com.big.company.analytics.services.impl.EmployeeHierarchyReport;
-import com.big.company.analytics.services.EmployeeReport;
+import com.big.company.analytics.services.impl.EmployeeDataExtractorService;
+import com.big.company.analytics.services.FileExtractorService;
+import com.big.company.analytics.services.impl.EmployeeHierarchyReportService;
+import com.big.company.analytics.services.EmployeeReportService;
 import com.big.company.analytics.services.impl.EmployeeNodeGenerator;
 
 import java.io.File;
@@ -28,7 +28,7 @@ public class MainApplication {
         System.out.println();
         System.out.println("Init extraction of employees from file");
 
-        FileExtractor<Employee> extractor = getFileExtractor();
+        FileExtractorService<Employee> extractor = getFileExtractor();
         List<Employee> employees = extractEmployeesFromFile(extractor, csvFile);
 
         System.out.println("Extraction successfully done!");
@@ -46,7 +46,7 @@ public class MainApplication {
         System.out.println("Init report of managers with policy violation");
         System.out.println();
 
-        EmployeeReport report = new EmployeeHierarchyReport();
+        EmployeeReportService report = new EmployeeHierarchyReportService();
         runReports(report, employeesHierarchy);
         System.out.println("=========== FINISHING ANALYTICS REPORTS ===========");
     }
@@ -62,19 +62,19 @@ public class MainApplication {
         return new File(filePath);
     }
 
-    private static FileExtractor<Employee> getFileExtractor() {
+    private static FileExtractorService<Employee> getFileExtractor() {
         String hasHeader = System.getProperty("has_header");
         if (hasHeader == null || (!hasHeader.equalsIgnoreCase("true") && !hasHeader.equalsIgnoreCase("false"))) {
             System.out.println("WARNING -> The 'has_header' property is not set to 'true' or 'false'. Using default configuration: expecting a file with a header.");
-            return new EmployeeDataExtractor();
+            return new EmployeeDataExtractorService();
         }
 
         boolean expectHeader = Boolean.parseBoolean(hasHeader);
         System.out.println("DataExtractor -> Using user configuration: Expect file with " + (expectHeader ? "header" : "NO header"));
-        return new EmployeeDataExtractor(expectHeader);
+        return new EmployeeDataExtractorService(expectHeader);
     }
 
-    private static List<Employee> extractEmployeesFromFile(FileExtractor<Employee> extractor, File csvFile) {
+    private static List<Employee> extractEmployeesFromFile(FileExtractorService<Employee> extractor, File csvFile) {
         try {
             return extractor.extractFile(csvFile);
         } catch (FileExtractionException e) {
@@ -89,7 +89,7 @@ public class MainApplication {
         }
     }
 
-    private static void runReports(EmployeeReport report, EmployeeNode employees) {
+    private static void runReports(EmployeeReportService report, EmployeeNode employees) {
         try {
             report.reportManagersSalaryPolicyViolation(employees);
             report.reportManagersWithExcessiveReportingLines(employees);

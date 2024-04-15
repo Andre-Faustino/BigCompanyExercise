@@ -1,7 +1,7 @@
 package com.big.company.analytics.domain;
 
 import com.big.company.analytics.exception.EmployeeNodeException;
-import com.big.company.analytics.services.impl.EmployeeDataExtractor;
+import com.big.company.analytics.services.impl.EmployeeDataExtractorService;
 
 import static com.big.company.analytics.test.util.AssertThrows.*;
 
@@ -22,7 +22,7 @@ class EmployeeNodeTests {
 
     @BeforeEach
     void init() {
-        this.employees = new EmployeeDataExtractor().extractFile(TEST_FILEPATH, TEST_FILENAME);
+        this.employees = new EmployeeDataExtractorService().extractFile(TEST_FILEPATH, TEST_FILENAME);
     }
 
     @Test
