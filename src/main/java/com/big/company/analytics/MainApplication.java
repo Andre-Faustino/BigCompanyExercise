@@ -32,6 +32,7 @@ public class MainApplication {
         List<Employee> employees = extractEmployeesFromFile(extractor, csvFile);
 
         System.out.println("Extraction successfully done!");
+        System.out.printf("Employees loaded: %d%n", employees.size());
         System.out.println();
 
         System.out.println("Creating employee hierarchy...");

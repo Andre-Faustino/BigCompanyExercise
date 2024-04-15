@@ -69,6 +69,7 @@ public class EmployeeHierarchyReport implements EmployeeReport {
         report.append(String.format("----- Report of employees with salary policy violation -----%n"));
         report.append(String.format("-> Minimum percentage allowed: %d %n", minimumPercentage));
         report.append(String.format("-> Maximum percentage allowed: %d %n", maximumPercentage));
+        report.append(String.format("-> Number of employees with salary policy violation: %d%n", managersWithPolicyViolation.size()));
         report.append(String.format("%-12s|%-12s|%-12s|%-12s|%-12s%n",
                 "ID",
                 "FIRST NAME",
@@ -84,7 +85,7 @@ public class EmployeeHierarchyReport implements EmployeeReport {
                         employee.salary(),
                         violationDescr)));
 
-        System.out.println(report.toString());
+        System.out.println(report);
     }
 
     /**
@@ -167,6 +168,7 @@ public class EmployeeHierarchyReport implements EmployeeReport {
     private synchronized void printReportManagersWithExcessiveReportingLines(Map<Employee, Integer> managerAndReportingLines, Integer reportingLinesThreshold) {
         StringBuilder report = new StringBuilder();
         report.append(String.format("----- Report of employees with reporting line higher than %d -----%n", reportingLinesThreshold));
+        report.append(String.format("-> Number of employees with excessive reporting lines: %d%n", managerAndReportingLines.size()));
         report.append(String.format("%-12s|%-12s|%-12s|%-12s%n",
                 "ID",
                 "FIRST NAME",
