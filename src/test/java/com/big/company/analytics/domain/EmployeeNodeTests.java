@@ -49,6 +49,15 @@ class EmployeeNodeTests {
     }
 
     @Test
+    void shouldFailsWhenCreateEmployeeNodeWithInvalidData() {
+        assertThrows("Employee must not be null", EmployeeNodeException.class,
+                () -> new EmployeeNode(null, null));
+        assertThrows("Subordinates list must not be null", EmployeeNodeException.class,
+                () -> new EmployeeNode(new Employee(123, "John", "Carmeo", 140000, null),
+                        null));
+    }
+
+    @Test
     void shouldFailsWithInvalidEmployeeWhenAddToNode() {
         Employee ceo = EmployeeUtils.findCEO(employees);
         EmployeeNode employeeNode = new EmployeeNode(ceo);
