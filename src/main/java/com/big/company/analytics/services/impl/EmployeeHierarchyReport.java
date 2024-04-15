@@ -65,24 +65,26 @@ public class EmployeeHierarchyReport implements EmployeeReport {
      * @param maximumPercentage           the maximum percentage by which a manager's salary should be more than the average salary of their subordinates
      */
     private synchronized void printReportManagersSalaryPolicyViolation(Map<Employee, String> managersWithPolicyViolation, Integer minimumPercentage, Integer maximumPercentage) {
-        System.out.printf("----- Report of employees with salary policy violation -----%n");
-        System.out.printf("-> Minimum percentage allowed: %d %n", minimumPercentage);
-        System.out.printf("-> Maximum percentage allowed: %d %n", maximumPercentage);
-        System.out.printf("%-12s|%-12s|%-12s|%-12s|%-12s%n",
+        StringBuilder report = new StringBuilder();
+        report.append(String.format("----- Report of employees with salary policy violation -----%n"));
+        report.append(String.format("-> Minimum percentage allowed: %d %n", minimumPercentage));
+        report.append(String.format("-> Maximum percentage allowed: %d %n", maximumPercentage));
+        report.append(String.format("%-12s|%-12s|%-12s|%-12s|%-12s%n",
                 "ID",
                 "FIRST NAME",
                 "LAST NAME",
                 "SALARY",
-                "VIOLATION");
+                "VIOLATION"));
 
         managersWithPolicyViolation.forEach((employee, violationDescr) ->
-                System.out.printf("%-12d|%-12s|%-12s|%-12d|%s%n",
+                report.append(String.format("%-12d|%-12s|%-12s|%-12d|%s%n",
                         employee.id(),
                         employee.firstName(),
                         employee.lastName(),
                         employee.salary(),
-                        violationDescr));
-        System.out.println();
+                        violationDescr)));
+
+        System.out.println(report.toString());
     }
 
     /**
@@ -163,20 +165,22 @@ public class EmployeeHierarchyReport implements EmployeeReport {
      * @param reportingLinesThreshold    the threshold depth beyond which reporting lines are considered excessive
      */
     private synchronized void printReportManagersWithExcessiveReportingLines(Map<Employee, Integer> managerAndReportingLines, Integer reportingLinesThreshold) {
-        System.out.printf("----- Report of employees with reporting line higher than %d -----%n", reportingLinesThreshold);
-        System.out.printf("%-12s|%-12s|%-12s|%-12s%n",
+        StringBuilder report = new StringBuilder();
+        report.append(String.format("----- Report of employees with reporting line higher than %d -----%n", reportingLinesThreshold));
+        report.append(String.format("%-12s|%-12s|%-12s|%-12s%n",
                 "ID",
                 "FIRST NAME",
                 "LAST NAME",
-                "EXCESSIVE REPORTING LINES");
+                "EXCESSIVE REPORTING LINES"));
 
         managerAndReportingLines.forEach(((employee, reportingLines) ->
-                System.out.printf("%-12d|%-12s|%-12s|%-12d%n",
+                report.append(String.format("%-12d|%-12s|%-12s|%-12d%n",
                         employee.id(),
                         employee.firstName(),
                         employee.lastName(),
-                        reportingLines)));
-        System.out.println();
+                        reportingLines))));
+
+        System.out.println(report);
     }
 
 
