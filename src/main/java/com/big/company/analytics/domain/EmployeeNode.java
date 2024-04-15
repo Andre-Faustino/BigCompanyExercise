@@ -19,15 +19,11 @@ public record EmployeeNode(
      *
      * @param employee     Employee (required)
      * @param subordinates Subordinates (required)
-     * @throws EmployeeNodeException if any params in the builder is null.
+     * @throws NullPointerException if any params is null.
      */
     public EmployeeNode {
-        try {
-            Objects.requireNonNull(employee, "Employee must not be null");
-            Objects.requireNonNull(subordinates, "Subordinates list must not be null");
-        } catch (NullPointerException e) {
-            throw new EmployeeNodeException(e.getMessage());
-        }
+        Objects.requireNonNull(employee, "Employee must not be null");
+        Objects.requireNonNull(subordinates, "Subordinates list must not be null");
     }
 
     /**

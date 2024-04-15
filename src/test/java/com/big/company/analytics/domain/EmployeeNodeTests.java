@@ -50,9 +50,9 @@ class EmployeeNodeTests {
 
     @Test
     void shouldFailsWhenCreateEmployeeNodeWithInvalidData() {
-        assertThrows("Employee must not be null", EmployeeNodeException.class,
+        assertThrows("Employee must not be null", NullPointerException.class,
                 () -> new EmployeeNode(null, null));
-        assertThrows("Subordinates list must not be null", EmployeeNodeException.class,
+        assertThrows("Subordinates list must not be null", NullPointerException.class,
                 () -> new EmployeeNode(new Employee(123, "John", "Carmeo", 140000, null),
                         null));
     }

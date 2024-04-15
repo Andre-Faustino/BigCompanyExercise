@@ -3,7 +3,6 @@ package com.big.company.analytics.domain;
 import static org.junit.jupiter.api.Assertions.*;
 import static com.big.company.analytics.test.util.AssertThrows.assertThrows;
 
-import com.big.company.analytics.exception.EmployeeException;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
@@ -29,7 +28,7 @@ class EmployeeTests {
 
     @Test
     void shouldEmployeeFailForMissingProperties() {
-        assertThrows("Employee id is missing", EmployeeException.class,
+        assertThrows("Employee id is missing", NullPointerException.class,
                 () -> new Employee(
                         null,
                         "Joe",
@@ -38,7 +37,7 @@ class EmployeeTests {
                         125
                 ));
 
-        assertThrows("Employee first name is missing", EmployeeException.class,
+        assertThrows("Employee first name is missing", NullPointerException.class,
                 () -> new Employee(
                         123,
                         null,
@@ -47,7 +46,7 @@ class EmployeeTests {
                         125
                 ));
 
-        assertThrows("Employee last name is missing", EmployeeException.class,
+        assertThrows("Employee last name is missing", NullPointerException.class,
                 () -> new Employee(
                         123,
                         "Joe",
@@ -56,7 +55,7 @@ class EmployeeTests {
                         125
                 ));
 
-        assertThrows("Employee salary is missing", EmployeeException.class,
+        assertThrows("Employee salary is missing", NullPointerException.class,
                 () -> new Employee(
                         123,
                         "Joe",
