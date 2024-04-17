@@ -2,7 +2,7 @@ package com.big.company.analytics.services;
 
 import com.big.company.analytics.domain.Employee;
 import com.big.company.analytics.domain.EmployeeNode;
-import com.big.company.analytics.services.impl.EmployeeDataExtractorService;
+import com.big.company.analytics.services.impl.EmployeeCsvFileReader;
 
 import static com.big.company.analytics.test.util.AssertThrows.*;
 
@@ -28,15 +28,15 @@ class EmployeeReportServiceTests {
 
     @BeforeEach
     void init() {
-        this.employees = new EmployeeDataExtractorService().extractFile(TEST_FILEPATH, TEST_FILENAME);
+        this.employees = new EmployeeCsvFileReader().readFile(TEST_FILEPATH, TEST_FILENAME);
         this.nodeService = new EmployeeNodeGenerator();
         this.report = new EmployeeHierarchyReportService();
     }
 
     @Test
     void shouldReportManagersWithSalaryPolicyViolation() {
-        this.employees = new EmployeeDataExtractorService().extractFile(TEST_FILEPATH, "SalaryViolationPolicyData.csv");
-        EmployeeNode employeesHierarchy = nodeService.getEmployeesHierarchy(employees);
+        this.employees = new EmployeeCsvFileReader().readFile(TEST_FILEPATH, "SalaryViolationPolicyData.csv");
+        EmployeeNode employeesHierarchy = nodeService.generateEmployeesHierarchy(employees);
 
         Map<Employee, String> managers = report.reportManagersSalaryPolicyViolation(employeesHierarchy);
 
@@ -51,7 +51,7 @@ class EmployeeReportServiceTests {
 
     @Test
     void shouldReportManagersWithExcessiveReportingLines() {
-        EmployeeNode employeesHierarchy = nodeService.getEmployeesHierarchy(employees);
+        EmployeeNode employeesHierarchy = nodeService.generateEmployeesHierarchy(employees);
 
         Integer reportingLinesThreshold = 6;
         Map<Employee, Integer> managers = report.reportManagersWithExcessiveReportingLines(employeesHierarchy, reportingLinesThreshold);
@@ -76,7 +76,7 @@ class EmployeeReportServiceTests {
         assertThrows("Employees hierarchy must not be null", NullPointerException.class,
                 () -> report.reportManagersWithExcessiveReportingLines(null));
 
-        EmployeeNode employeesHierarchy = nodeService.getEmployeesHierarchy(employees);
+        EmployeeNode employeesHierarchy = nodeService.generateEmployeesHierarchy(employees);
 
         assertThrows("Minimum Percentage must not be null", NullPointerException.class,
                 () -> report.reportManagersSalaryPolicyViolation(employeesHierarchy, null, null));
@@ -88,8 +88,8 @@ class EmployeeReportServiceTests {
 
     @Test
     void shouldRunReportsConcurrently() {
-        this.employees = new EmployeeDataExtractorService().extractFile(TEST_FILEPATH, "HugeData.csv");
-        EmployeeNode employeesHierarchy = nodeService.getEmployeesHierarchy(employees);
+        this.employees = new EmployeeCsvFileReader().readFile(TEST_FILEPATH, "HugeData.csv");
+        EmployeeNode employeesHierarchy = nodeService.generateEmployeesHierarchy(employees);
 
         Arrays.asList(
                 CompletableFuture.supplyAsync(() -> report.reportManagersSalaryPolicyViolation(employeesHierarchy))

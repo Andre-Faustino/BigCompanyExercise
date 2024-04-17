@@ -3,7 +3,7 @@ package com.big.company.analytics.services;
 import com.big.company.analytics.domain.Employee;
 import com.big.company.analytics.exception.FileExtractionException;
 import com.big.company.analytics.exception.ParseExtractionException;
-import com.big.company.analytics.services.impl.EmployeeDataExtractorService;
+import com.big.company.analytics.services.impl.EmployeeCsvFileReader;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -14,40 +14,40 @@ import java.util.stream.IntStream;
 import static org.junit.jupiter.api.Assertions.*;
 import static com.big.company.analytics.test.util.AssertThrows.assertThrows;
 
-class FileExtractorServiceTests {
+class FileReaderServiceTests {
 
     private static final String TEST_FILEPATH = "src/test/resources/";
-    FileExtractorService<Employee> fileExtractorService;
+    FileReaderService<Employee> fileReaderService;
 
     @BeforeEach
     void init() {
-        this.fileExtractorService = new EmployeeDataExtractorService();
+        this.fileReaderService = new EmployeeCsvFileReader();
     }
 
     @Test
     void shouldFailWhenExtractFileWithWrongParameters() {
         assertThrows("File should not be null", NullPointerException.class,
-                () -> fileExtractorService.extractFile(null));
+                () -> fileReaderService.readFile(null));
 
         assertThrows("Path should not be null", NullPointerException.class,
-                () -> fileExtractorService.extractFile(null, null));
+                () -> fileReaderService.readFile(null, null));
 
         assertThrows("File name should not be null", NullPointerException.class,
-                () -> fileExtractorService.extractFile("valid/path", null));
+                () -> fileReaderService.readFile("valid/path", null));
 
         assertThrows("Path and filename should not be blank", FileExtractionException.class,
-                () -> fileExtractorService.extractFile("", ""));
+                () -> fileReaderService.readFile("", ""));
     }
 
     @Test
     void shouldFailWhenFileNotExistParameters() {
         assertThrows("File not found | Filepath: this\\path\\not\\exist | Filename: NoFile", FileExtractionException.class,
-                () -> fileExtractorService.extractFile("this/path/not/exist", "NoFile"));
+                () -> fileReaderService.readFile("this/path/not/exist", "NoFile"));
     }
 
     @Test
     void shouldDataSuccessfullyExtracted() {
-        List<Employee> employeeData = fileExtractorService.extractFile(TEST_FILEPATH, "ValidatedDataWithHeader.csv");
+        List<Employee> employeeData = fileReaderService.readFile(TEST_FILEPATH, "ValidatedDataWithHeader.csv");
 
         List<Employee> expectedEmployees = Arrays.asList(
                 new Employee(123, "Joe", "Doe", 60000, null),
@@ -66,16 +66,16 @@ class FileExtractorServiceTests {
     @Test
     void shouldInvalidDataExtractionFails() {
         assertThrows("Error on line 2 -> For input string: \"WrongFormat\"", ParseExtractionException.class,
-                () -> fileExtractorService.extractFile(TEST_FILEPATH, "WrongFormatData.csv"));
+                () -> fileReaderService.readFile(TEST_FILEPATH, "WrongFormatData.csv"));
 
         assertThrows("Error on line 2 -> Employee last name is missing", ParseExtractionException.class,
-                () -> fileExtractorService.extractFile(TEST_FILEPATH, "MissingData.csv"));
+                () -> fileReaderService.readFile(TEST_FILEPATH, "MissingData.csv"));
     }
 
     @Test
     void shouldSuccessfullyInputDataWithoutHeader() {
-        fileExtractorService = new EmployeeDataExtractorService(false);
-        List<Employee> employeeData = fileExtractorService.extractFile(TEST_FILEPATH, "ValidatedDataWithoutHeader.csv");
+        fileReaderService = new EmployeeCsvFileReader(false);
+        List<Employee> employeeData = fileReaderService.readFile(TEST_FILEPATH, "ValidatedDataWithoutHeader.csv");
 
         List<Employee> expectedEmployees = Arrays.asList(
                 new Employee(123, "Joe", "Doe", 60000, null),
@@ -91,23 +91,23 @@ class FileExtractorServiceTests {
     @Test
     void shouldWrongHeaderConfigFails() {
         assertThrows("Required header not found on header file: firstname", ParseExtractionException.class,
-                () -> fileExtractorService.extractFile(TEST_FILEPATH, "ValidatedDataWithoutHeader.csv"));
+                () -> fileReaderService.readFile(TEST_FILEPATH, "ValidatedDataWithoutHeader.csv"));
 
 
-        FileExtractorService<Employee> fileExtractorServiceExpectingNoHeader = new EmployeeDataExtractorService(false);
+        FileReaderService<Employee> fileReaderServiceExpectingNoHeader = new EmployeeCsvFileReader(false);
         assertThrows("Error on line 0 -> For input string: \"Id\"", ParseExtractionException.class,
-                () -> fileExtractorServiceExpectingNoHeader.extractFile(TEST_FILEPATH, "ValidatedDataWithHeader.csv"));
+                () -> fileReaderServiceExpectingNoHeader.readFile(TEST_FILEPATH, "ValidatedDataWithHeader.csv"));
     }
 
     @Test
     void shouldInvalidDataHeaderFails() {
         assertThrows("Required header not found on header file: lastname", ParseExtractionException.class,
-                () -> fileExtractorService.extractFile(TEST_FILEPATH, "DataWithInvalidHeader.csv"));
+                () -> fileReaderService.readFile(TEST_FILEPATH, "DataWithInvalidHeader.csv"));
     }
 
     @Test
     void shouldDataWithOddHeaderSuccess() {
-        List<Employee> employeeData = fileExtractorService.extractFile(TEST_FILEPATH, "DataWithOddCaseHeader.csv");
+        List<Employee> employeeData = fileReaderService.readFile(TEST_FILEPATH, "DataWithOddCaseHeader.csv");
 
         List<Employee> expectedEmployees = Arrays.asList(
                 new Employee(123, "Joe", "Doe", 60000, null),

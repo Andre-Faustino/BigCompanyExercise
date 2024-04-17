@@ -3,19 +3,19 @@ package com.big.company.analytics.services.impl;
 import com.big.company.analytics.domain.Employee;
 import com.big.company.analytics.exception.FileExtractionException;
 import com.big.company.analytics.exception.ParseExtractionException;
-import com.big.company.analytics.services.FileExtractorService;
+import com.big.company.analytics.services.FileReaderService;
 
 import java.io.*;
 import java.nio.file.Paths;
 import java.util.*;
 
 /**
- * An implementation of {@code FileExtractor} for extracting {@code Employee} objects from a CSV file
+ * An implementation of {@code FileReaderService} for retrieve {@code Employee} objects from a CSV file
  * with a fixed comma delimiter (`,`).
  * <p>
  * This implementation assumes that the CSV file has a header line that needs to be skipped.
  */
-public final class EmployeeDataExtractorService implements FileExtractorService<Employee> {
+public final class EmployeeCsvFileReader implements FileReaderService<Employee> {
 
     /**
      * The delimiter used in the CSV file.
@@ -36,50 +36,50 @@ public final class EmployeeDataExtractorService implements FileExtractorService<
     /**
      * Constructs a new {@code EmployeeDataExtractor} with the specified value for whether the CSV file has a header line.
      *
-     * @param hasHeader {@code true} if the CSV file has a header line to be skipped, {@code false} otherwise
+     * @param hasHeader {@code true} if the CSV file has a header line to be skipped, {@code false} otherwise (including null)
      */
-    public EmployeeDataExtractorService(Boolean hasHeader) {
-        this.hasHeader = hasHeader;
+    public EmployeeCsvFileReader(Boolean hasHeader) {
+        this.hasHeader = (hasHeader != null) ? hasHeader : Defaults.HAS_HEADER;
     }
 
     /**
      * Constructs a new {@code EmployeeDataExtractor} with default settings, assuming the CSV file has a header line.
      */
-    public EmployeeDataExtractorService() {
+    public EmployeeCsvFileReader() {
         this.hasHeader = Defaults.HAS_HEADER;
     }
 
     /**
-     * Extracts {@code Employee} objects from a CSV file specified by path and filename.
+     * Read {@code Employee} objects from a CSV file specified by path and filename.
      *
      * @param path     the path to the directory containing the CSV file
      * @param fileName the name of the CSV file
-     * @return a list of {@code Employee} objects extracted from the CSV file
+     * @return a list of {@code Employee} objects read from the CSV file
      * @throws FileExtractionException  if the file is not found or cannot be loaded
      * @throws ParseExtractionException if any error occurs during parsing of the file content
      * @throws NullPointerException     if any params is null
      */
     @Override
-    public List<Employee> extractFile(String path, String fileName) {
+    public List<Employee> readFile(String path, String fileName) {
         Objects.requireNonNull(path, "Path should not be null");
         Objects.requireNonNull(fileName, "File name should not be null");
         if (path.isBlank() || fileName.isBlank())
             throw new FileExtractionException("Path and filename should not be blank");
 
-        return extractFile(loadFile(path, fileName));
+        return readFile(loadFile(path, fileName));
     }
 
     /**
-     * Extracts {@code Employee} objects from a specified CSV file.
+     * Read {@code Employee} objects from a specified CSV file.
      *
-     * @param file the CSV file object from which to extract {@code Employee} objects
-     * @return a list of {@code Employee} objects extracted from the CSV file
+     * @param file the CSV file object from which {@code Employee} objects will be read
+     * @return a list of {@code Employee} objects read from the CSV file
      * @throws FileExtractionException  if the file is not found or cannot be loaded
      * @throws ParseExtractionException if any error occurs during parsing of the file content
      * @throws NullPointerException     if any params is null
      */
     @Override
-    public List<Employee> extractFile(File file) {
+    public List<Employee> readFile(File file) {
         Objects.requireNonNull(file, "File should not be null");
 
         List<Employee> employees = new ArrayList<>();
@@ -97,7 +97,7 @@ public final class EmployeeDataExtractorService implements FileExtractorService<
                     continue;
                 }
                 String[] values = (hasHeader)
-                        ? orderExtractedData(headerMapper, line.split(DELIMITER))
+                        ? orderReadData(headerMapper, line.split(DELIMITER))
                         : line.split(DELIMITER);
 
                 employees.add(employeeFromLineValues(values, curLine));
@@ -130,8 +130,8 @@ public final class EmployeeDataExtractorService implements FileExtractorService<
     /**
      * Constructs an {@code Employee} object from an array of values representing employee data from a CSV line.
      *
-     * @param values the array of values representing employee data
-     * @param line   the line number from which the data was extracted
+     * @param values the array of values representing read data
+     * @param line   the line number from which the data was read
      * @return the constructed {@code Employee} object
      * @throws ParseExtractionException if any error occurs during parsing of the employee data
      */
@@ -167,13 +167,13 @@ public final class EmployeeDataExtractorService implements FileExtractorService<
     }
 
     /**
-     * Orders extracted data based on the header mapper array.
+     * Orders read data based on the header mapper array.
      *
      * @param headerMapper the header mapper array
      * @param values       the array of values representing data from a CSV line
      * @return the ordered data array
      */
-    private String[] orderExtractedData(int[] headerMapper, String[] values) {
+    private String[] orderReadData(int[] headerMapper, String[] values) {
         String[] orderedData = new String[values.length];
         for (int i = 0; i < values.length; i++) {
             orderedData[headerMapper[i]] = values[i];
