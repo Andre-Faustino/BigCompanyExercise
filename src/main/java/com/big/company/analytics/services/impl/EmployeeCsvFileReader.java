@@ -122,7 +122,7 @@ public final class EmployeeCsvFileReader implements FileReaderService<Employee> 
      * @param fileName the name of the file
      * @return the loaded {@code File} object
      */
-    private static File loadFile(String path, String fileName) {
+    private File loadFile(String path, String fileName) {
         String filePath = Paths.get(path, fileName).toString();
         return new File(filePath);
     }
@@ -135,7 +135,7 @@ public final class EmployeeCsvFileReader implements FileReaderService<Employee> 
      * @return the constructed {@code Employee} object
      * @throws ParseExtractionException if any error occurs during parsing of the employee data
      */
-    private static Employee employeeFromLineValues(String[] values, int line) {
+    private Employee employeeFromLineValues(String[] values, int line) {
         try {
             return new Employee(
                     getIntegerValue(values, Defaults.ID_INDEX),
@@ -188,7 +188,7 @@ public final class EmployeeCsvFileReader implements FileReaderService<Employee> 
      * @param index  the index from which to get the value
      * @return the integer value at the specified index, or {@code null} if the index is out of bounds
      */
-    private static Integer getIntegerValue(String[] values, int index) {
+    private Integer getIntegerValue(String[] values, int index) {
         return (index < values.length) ? Integer.valueOf(values[index]) : null;
     }
 
@@ -199,7 +199,7 @@ public final class EmployeeCsvFileReader implements FileReaderService<Employee> 
      * @param index  the index from which to get the value
      * @return the string value at the specified index, or {@code null} if the index is out of bounds
      */
-    private static String getStringValue(String[] values, int index) {
+    private String getStringValue(String[] values, int index) {
         return (index < values.length) ? values[index] : null;
     }
 

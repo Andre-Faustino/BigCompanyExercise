@@ -123,7 +123,7 @@ public class EmployeeHierarchyReportService implements EmployeeReportService {
      * @param node   the current node in the employee hierarchy
      * @param result a map to store the manager node and its corresponding average salary of subordinates
      */
-    private static void getNodesSubordinatesSalaryAverage(EmployeeNode node, Map<Employee, Double> result) {
+    private void getNodesSubordinatesSalaryAverage(EmployeeNode node, Map<Employee, Double> result) {
         if (node.subordinates().isEmpty()) return;
         Double average = node.subordinates().stream()
                 .collect(Collectors.averagingInt(child -> child.employee().salary()));
