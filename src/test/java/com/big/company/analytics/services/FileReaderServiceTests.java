@@ -65,10 +65,10 @@ class FileReaderServiceTests {
 
     @Test
     void shouldInvalidDataExtractionFails() {
-        assertThrows("Error on line 2 -> For input string: \"WrongFormat\"", ParseExtractionException.class,
+        assertThrows("Error on line number 2 -> For input string: \"WrongFormat\"", ParseExtractionException.class,
                 () -> fileReaderService.readFile(TEST_FILEPATH, "WrongFormatData.csv"));
 
-        assertThrows("Error on line 2 -> Employee last name is missing", ParseExtractionException.class,
+        assertThrows("Error on line number 2 -> Line has less elements than the required size 4", ParseExtractionException.class,
                 () -> fileReaderService.readFile(TEST_FILEPATH, "MissingData.csv"));
     }
 
@@ -95,7 +95,7 @@ class FileReaderServiceTests {
 
 
         FileReaderService<Employee> fileReaderServiceExpectingNoHeader = new EmployeeCsvFileReader(false);
-        assertThrows("Error on line 0 -> For input string: \"Id\"", ParseExtractionException.class,
+        assertThrows("Error on line number 0 -> For input string: \"Id\"", ParseExtractionException.class,
                 () -> fileReaderServiceExpectingNoHeader.readFile(TEST_FILEPATH, "ValidatedDataWithHeader.csv"));
     }
 
