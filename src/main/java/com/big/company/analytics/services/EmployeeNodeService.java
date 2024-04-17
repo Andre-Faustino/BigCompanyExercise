@@ -19,5 +19,5 @@ public interface EmployeeNodeService {
      * @throws NullPointerException if employees list is null
      * @throws EmployeeNodeServiceException if employees list is not valid e.g. not having an eligible ceo
      */
-    EmployeeNode getEmployeesHierarchy(List<Employee> employees);
+    EmployeeNode generateEmployeesHierarchy(List<Employee> employees);
 }

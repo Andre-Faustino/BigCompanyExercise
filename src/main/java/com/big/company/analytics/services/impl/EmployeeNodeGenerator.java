@@ -21,7 +21,7 @@ public class EmployeeNodeGenerator implements EmployeeNodeService {
      * {@inheritDoc}
      */
     @Override
-    public EmployeeNode getEmployeesHierarchy(List<Employee> employees) {
+    public EmployeeNode generateEmployeesHierarchy(List<Employee> employees) {
         Objects.requireNonNull(employees, "Employees list must not be null");
         try {
             Employee ceo = EmployeeUtils.findCEO(employees);

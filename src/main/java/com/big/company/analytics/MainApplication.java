@@ -6,8 +6,8 @@ import com.big.company.analytics.exception.FileExtractionException;
 import com.big.company.analytics.exception.ParseExtractionException;
 import com.big.company.analytics.exception.UnexpectedException;
 import com.big.company.analytics.services.EmployeeNodeService;
-import com.big.company.analytics.services.impl.EmployeeDataExtractorService;
-import com.big.company.analytics.services.FileExtractorService;
+import com.big.company.analytics.services.impl.EmployeeCsvFileReader;
+import com.big.company.analytics.services.FileReaderService;
 import com.big.company.analytics.services.impl.EmployeeHierarchyReportService;
 import com.big.company.analytics.services.EmployeeReportService;
 import com.big.company.analytics.services.impl.EmployeeNodeGenerator;
@@ -28,7 +28,7 @@ public class MainApplication {
         System.out.println();
         System.out.println("Init extraction of employees from file");
 
-        FileExtractorService<Employee> extractor = getFileExtractor();
+        FileReaderService<Employee> extractor = getFileExtractor();
         List<Employee> employees = extractEmployeesFromFile(extractor, csvFile);
 
         System.out.println("Extraction successfully done!");
@@ -38,7 +38,7 @@ public class MainApplication {
         System.out.println("Creating employee hierarchy...");
 
         EmployeeNodeService nodeService = new EmployeeNodeGenerator();
-        EmployeeNode employeesHierarchy = nodeService.getEmployeesHierarchy(employees);
+        EmployeeNode employeesHierarchy = nodeService.generateEmployeesHierarchy(employees);
 
         System.out.println("Employee hierarchy generated!");
         System.out.println();
@@ -62,21 +62,21 @@ public class MainApplication {
         return new File(filePath);
     }
 
-    private static FileExtractorService<Employee> getFileExtractor() {
+    private static FileReaderService<Employee> getFileExtractor() {
         String hasHeader = System.getProperty("has_header");
         if (hasHeader == null || (!hasHeader.equalsIgnoreCase("true") && !hasHeader.equalsIgnoreCase("false"))) {
             System.out.println("WARNING -> The 'has_header' property is not set to 'true' or 'false'. Using default configuration: expecting a file with a header.");
-            return new EmployeeDataExtractorService();
+            return new EmployeeCsvFileReader();
         }
 
         boolean expectHeader = Boolean.parseBoolean(hasHeader);
         System.out.println("DataExtractor -> Using user configuration: Expect file with " + (expectHeader ? "header" : "NO header"));
-        return new EmployeeDataExtractorService(expectHeader);
+        return new EmployeeCsvFileReader(expectHeader);
     }
 
-    private static List<Employee> extractEmployeesFromFile(FileExtractorService<Employee> extractor, File csvFile) {
+    private static List<Employee> extractEmployeesFromFile(FileReaderService<Employee> extractor, File csvFile) {
         try {
-            return extractor.extractFile(csvFile);
+            return extractor.readFile(csvFile);
         } catch (FileExtractionException e) {
             System.out.println("ERROR when loading the file");
             throw new FileExtractionException(e.getMessage());

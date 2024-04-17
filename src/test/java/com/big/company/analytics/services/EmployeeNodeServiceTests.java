@@ -3,7 +3,7 @@ package com.big.company.analytics.services;
 import com.big.company.analytics.domain.Employee;
 import com.big.company.analytics.domain.EmployeeNode;
 import com.big.company.analytics.exception.EmployeeNodeServiceException;
-import com.big.company.analytics.services.impl.EmployeeDataExtractorService;
+import com.big.company.analytics.services.impl.EmployeeCsvFileReader;
 import com.big.company.analytics.services.impl.EmployeeNodeGenerator;
 import com.big.company.analytics.test.util.AssertThrows;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,33 +22,33 @@ class EmployeeNodeServiceTests {
 
     @BeforeEach
     void init() {
-        this.employees = new EmployeeDataExtractorService().extractFile(TEST_FILEPATH, TEST_FILENAME);
+        this.employees = new EmployeeCsvFileReader().readFile(TEST_FILEPATH, TEST_FILENAME);
     }
 
     @Test
     void shouldGetEmployeesHierarchySuccessfully() {
         EmployeeNodeService nodeService = new EmployeeNodeGenerator();
-        EmployeeNode employeesHierarchy = nodeService.getEmployeesHierarchy(employees);
+        EmployeeNode employeesHierarchy = nodeService.generateEmployeesHierarchy(employees);
         assertEquals(100, employeesHierarchy.size());
     }
 
     @Test
     void shouldGetEmployeesHierarchyWithUnorderedListSuccessfully() {
-        List<Employee> unorderedEmployees = new EmployeeDataExtractorService().extractFile(TEST_FILEPATH, "UnorderedData.csv");
+        List<Employee> unorderedEmployees = new EmployeeCsvFileReader().readFile(TEST_FILEPATH, "UnorderedData.csv");
         EmployeeNodeService nodeService = new EmployeeNodeGenerator();
-        assertEquals(5, nodeService.getEmployeesHierarchy(unorderedEmployees).size());
+        assertEquals(5, nodeService.generateEmployeesHierarchy(unorderedEmployees).size());
     }
 
     @Test
     void shouldInvalidEmployeesListFails() {
         EmployeeNodeService nodeService = new EmployeeNodeGenerator();
         assertThrows("Employees list must not be null", NullPointerException.class,
-                () -> nodeService.getEmployeesHierarchy(null));
+                () -> nodeService.generateEmployeesHierarchy(null));
 
         Employee anotherCEO = new Employee(345, "Elon", "Musk", 250000, null);
         employees.add(anotherCEO);
 
         AssertThrows.assertThrows("Error when creating Employee Hierarchy | Employee list has more than one CEO", EmployeeNodeServiceException.class,
-                () -> nodeService.getEmployeesHierarchy(employees));
+                () -> nodeService.generateEmployeesHierarchy(employees));
     }
 }
