@@ -74,7 +74,7 @@ class MainApplicationTests {
                 ),
                 Arguments.of(
                         "WrongFormatData.csv",
-                        "Error on line 2 -> For input string: \"WrongFormat\""
+                        "Error on line number 2 -> For input string: \"WrongFormat\""
                 )
         );
     }
@@ -94,7 +94,7 @@ class MainApplicationTests {
         System.setProperty("file", TEST_FILEPATH + fileName);
         System.setProperty("has_header", "false");
 
-        assertThrows("Error on line 0 -> For input string: \"Doe\"", ParseExtractionException.class,
+        assertThrows("Error on line number 0 -> For input string: \"Doe\"", ParseExtractionException.class,
                 () -> MainApplication.main(null));
     }
 

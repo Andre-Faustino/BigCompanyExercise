@@ -36,7 +36,7 @@ public final class EmployeeCsvFileReader implements FileReaderService<Employee> 
     /**
      * Constructs a new {@code EmployeeDataExtractor} with the specified value for whether the CSV file has a header line.
      *
-     * @param hasHeader {@code true} if the CSV file has a header line to be skipped, {@code false} otherwise (including null)
+     * @param hasHeader {@code true} if the CSV file has a header line to be skipped, {@code false} otherwise
      */
     public EmployeeCsvFileReader(Boolean hasHeader) {
         this.hasHeader = (hasHeader != null) ? hasHeader : Defaults.HAS_HEADER;
@@ -100,6 +100,9 @@ public final class EmployeeCsvFileReader implements FileReaderService<Employee> 
                         ? orderReadData(headerMapper, line.split(DELIMITER))
                         : line.split(DELIMITER);
 
+                if (values.length < Defaults.MINIMUM_REQUIRED_VALUES_BY_CSV_LINE)
+                    throw new ParseExtractionException(String.format("Error on line number %d -> %s %d", curLine, "Line has less elements than the required size", Defaults.MINIMUM_REQUIRED_VALUES_BY_CSV_LINE));
+
                 employees.add(employeeFromLineValues(values, curLine));
                 curLine++;
             }
@@ -128,24 +131,24 @@ public final class EmployeeCsvFileReader implements FileReaderService<Employee> 
     }
 
     /**
-     * Constructs an {@code Employee} object from an array of values representing employee data from a CSV line.
+     * Constructs an {@code Employee} object from an array of values representing employee data from a CSV lineNumber.
      *
-     * @param values the array of values representing read data
-     * @param line   the line number from which the data was read
+     * @param values     the array of values representing read data
+     * @param lineNumber the lineNumber number from which the data was read
      * @return the constructed {@code Employee} object
      * @throws ParseExtractionException if any error occurs during parsing of the employee data
      */
-    private Employee employeeFromLineValues(String[] values, int line) {
+    private Employee employeeFromLineValues(String[] values, int lineNumber) {
         try {
-            return new Employee(
-                    getIntegerValue(values, Defaults.ID_INDEX),
-                    getStringValue(values, Defaults.FIRST_NAME_INDEX),
-                    getStringValue(values, Defaults.LAST_NAME_INDEX),
-                    getIntegerValue(values, Defaults.SALARY_INDEX),
-                    getIntegerValue(values, Defaults.MANAGER_ID_INDEX)
-            );
+            Integer id = Integer.valueOf(values[Defaults.ID_INDEX]);
+            String firstName = String.valueOf(values[Defaults.FIRST_NAME_INDEX]);
+            String lastName = String.valueOf(values[Defaults.LAST_NAME_INDEX]);
+            Integer salary = Integer.valueOf(values[Defaults.SALARY_INDEX]);
+            Integer managerId = (values.length >= 5) ? Integer.valueOf(values[Defaults.MANAGER_ID_INDEX]) : null;
+
+            return new Employee(id, firstName, lastName, salary, managerId);
         } catch (Exception e) {
-            throw new ParseExtractionException(String.format("Error on line %d -> %s", line, e.getMessage()));
+            throw new ParseExtractionException(String.format("Error on line number %d -> %s", lineNumber, e.getMessage()));
         }
     }
 
@@ -182,28 +185,6 @@ public final class EmployeeCsvFileReader implements FileReaderService<Employee> 
     }
 
     /**
-     * Gets an integer value from the array of values at the specified index.
-     *
-     * @param values the array of values
-     * @param index  the index from which to get the value
-     * @return the integer value at the specified index, or {@code null} if the index is out of bounds
-     */
-    private Integer getIntegerValue(String[] values, int index) {
-        return (index < values.length) ? Integer.valueOf(values[index]) : null;
-    }
-
-    /**
-     * Gets a string value from the array of values at the specified index.
-     *
-     * @param values the array of values
-     * @param index  the index from which to get the value
-     * @return the string value at the specified index, or {@code null} if the index is out of bounds
-     */
-    private String getStringValue(String[] values, int index) {
-        return (index < values.length) ? values[index] : null;
-    }
-
-    /**
      * Provides default values for the {@code EmployeeDataExtractorService}.
      */
     private static class Defaults {
@@ -211,6 +192,10 @@ public final class EmployeeCsvFileReader implements FileReaderService<Employee> 
          * Default value indicating whether the CSV file has a header line.
          */
         static final boolean HAS_HEADER = true;
+        /**
+         * Default minimum required values for each line on csv be considered valid
+         */
+        static final int MINIMUM_REQUIRED_VALUES_BY_CSV_LINE = 4;
         /**
          * Default index for the 'id' column in the CSV file.
          */
