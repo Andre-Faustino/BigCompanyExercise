@@ -22,6 +22,9 @@ public final class EmployeeDataExtractorService implements FileExtractorService<
      */
     private static final String DELIMITER = ",";
 
+    /**
+     * Defines the order of header columns in a CSV file.
+     */
     private static final List<String> headerOrder =
             Arrays.asList("id", "firstname", "lastname", "salary", "managerid");
 
@@ -43,7 +46,7 @@ public final class EmployeeDataExtractorService implements FileExtractorService<
      * Constructs a new {@code EmployeeDataExtractor} with default settings, assuming the CSV file has a header line.
      */
     public EmployeeDataExtractorService() {
-        this.hasHeader = true;
+        this.hasHeader = Defaults.HAS_HEADER;
     }
 
     /**
@@ -135,11 +138,11 @@ public final class EmployeeDataExtractorService implements FileExtractorService<
     private static Employee employeeFromLineValues(String[] values, int line) {
         try {
             return new Employee(
-                    getIntegerValue(values, 0),
-                    getStringValue(values, 1),
-                    getStringValue(values, 2),
-                    getIntegerValue(values, 3),
-                    getIntegerValue(values, 4)
+                    getIntegerValue(values, Defaults.ID_INDEX),
+                    getStringValue(values, Defaults.FIRST_NAME_INDEX),
+                    getStringValue(values, Defaults.LAST_NAME_INDEX),
+                    getIntegerValue(values, Defaults.SALARY_INDEX),
+                    getIntegerValue(values, Defaults.MANAGER_ID_INDEX)
             );
         } catch (Exception e) {
             throw new ParseExtractionException(String.format("Error on line %d -> %s", line, e.getMessage()));
@@ -198,5 +201,35 @@ public final class EmployeeDataExtractorService implements FileExtractorService<
      */
     private static String getStringValue(String[] values, int index) {
         return (index < values.length) ? values[index] : null;
+    }
+
+    /**
+     * Provides default values for the {@code EmployeeDataExtractorService}.
+     */
+    private static class Defaults {
+        /**
+         * Default value indicating whether the CSV file has a header line.
+         */
+        static final boolean HAS_HEADER = true;
+        /**
+         * Default index for the 'id' column in the CSV file.
+         */
+        static final int ID_INDEX = 0;
+        /**
+         * Default index for the 'firstname' column in the CSV file.
+         */
+        static final int FIRST_NAME_INDEX = 1;
+        /**
+         * Default index for the 'lastname' column in the CSV file.
+         */
+        static final int LAST_NAME_INDEX = 2;
+        /**
+         * Default index for the 'salary' column in the CSV file.
+         */
+        static final int SALARY_INDEX = 3;
+        /**
+         * Default index for the 'managerid' column in the CSV file.
+         */
+        static final int MANAGER_ID_INDEX = 4;
     }
 }

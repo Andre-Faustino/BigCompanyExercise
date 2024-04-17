@@ -162,8 +162,8 @@ public class EmployeeHierarchyReportService implements EmployeeReportService {
      * Prints a report of managers with excessive reporting lines.
      * This method prints the details of managers along with the number of reporting lines exceeding the specified threshold.
      *
-     * @param managerAndReportingLines   a map containing managers with reporting lines greater than the depth threshold
-     * @param reportingLinesThreshold    the threshold depth beyond which reporting lines are considered excessive
+     * @param managerAndReportingLines a map containing managers with reporting lines greater than the depth threshold
+     * @param reportingLinesThreshold  the threshold depth beyond which reporting lines are considered excessive
      */
     private synchronized void printReportManagersWithExcessiveReportingLines(Map<Employee, Integer> managerAndReportingLines, Integer reportingLinesThreshold) {
         StringBuilder report = new StringBuilder();
@@ -195,7 +195,8 @@ public class EmployeeHierarchyReportService implements EmployeeReportService {
      */
     private Map<Employee, Integer> getNodesWithDepthGreaterThan(EmployeeNode employeeHierarchy, Integer depthThreshold) {
         Map<Employee, Integer> managerAndReportingLines = new HashMap<>();
-        traverseDepthGreaterThan(employeeHierarchy, 0, depthThreshold, managerAndReportingLines);
+        int rootDepth = 0;
+        traverseDepthGreaterThan(employeeHierarchy, rootDepth, depthThreshold, managerAndReportingLines);
         return managerAndReportingLines;
     }
 
