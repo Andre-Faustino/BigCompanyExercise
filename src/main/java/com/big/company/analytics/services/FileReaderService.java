@@ -2,7 +2,7 @@ package com.big.company.analytics.services;
 
 import java.io.File;
 
-import com.big.company.analytics.exception.FileExtractionException;
+import com.big.company.analytics.exception.FileReaderException;
 import com.big.company.analytics.exception.ParseExtractionException;
 
 import java.util.List;
@@ -20,7 +20,7 @@ public interface FileReaderService<T> {
      * @param path     the path to the directory containing the file
      * @param fileName the name of the file
      * @return a list of elements of type <b>T</b> read from the file
-     * @throws FileExtractionException  if the file is not found or cannot be loaded
+     * @throws FileReaderException  if the file is not found or cannot be loaded
      * @throws ParseExtractionException if any error occurs during parsing of the file content
      * @throws NullPointerException     if any params is null
      */
@@ -31,7 +31,7 @@ public interface FileReaderService<T> {
      *
      * @param file the CSV file object from which <b>T</b> objects will be read
      * @return a list of elements of type <b>T</b> read from the file
-     * @throws FileExtractionException  if the file is not found or cannot be loaded
+     * @throws FileReaderException  if the file is not found or cannot be loaded
      * @throws ParseExtractionException if any error occurs during parsing of the file content
      * @throws NullPointerException     if any params is null
      */

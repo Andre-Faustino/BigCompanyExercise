@@ -16,13 +16,13 @@ import static org.junit.jupiter.api.Assertions.*;
 class EmployeeNodeTests {
 
     private static final String TEST_FILEPATH = "src/test/resources/";
-    private static final String TEST_FILENAME = "ValidatedDataWithHeader.csv";
+    private static final String TEST_VALIDATED_FILENAME = "ValidatedDataWithHeader.csv";
 
     List<Employee> employees;
 
     @BeforeEach
     void init() {
-        this.employees = new EmployeeCsvFileReader().readFile(TEST_FILEPATH, TEST_FILENAME);
+        this.employees = new EmployeeCsvFileReader().readFile(TEST_FILEPATH, TEST_VALIDATED_FILENAME);
     }
 
     @Test
