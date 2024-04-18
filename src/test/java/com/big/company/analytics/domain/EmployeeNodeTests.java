@@ -11,11 +11,11 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
+import static com.big.company.analytics.test.util.TestResourceConstants.TEST_FILEPATH;
 import static org.junit.jupiter.api.Assertions.*;
 
 class EmployeeNodeTests {
 
-    private static final String TEST_FILEPATH = "src/test/resources/";
     private static final String TEST_VALIDATED_FILENAME = "ValidatedDataWithHeader.csv";
 
     List<Employee> employees;

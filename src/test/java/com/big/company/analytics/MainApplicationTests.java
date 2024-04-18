@@ -15,11 +15,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
 
+import static com.big.company.analytics.test.util.TestResourceConstants.TEST_FILEPATH;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MainApplicationTests {
-
-    private static final String TEST_FILEPATH = "src/test/resources/";
 
     @Test
     void shouldMainMethodWithNoHeaderFileSuccessWhenConfig() {
