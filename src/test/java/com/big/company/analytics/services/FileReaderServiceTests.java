@@ -11,12 +11,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.IntStream;
 
+import static com.big.company.analytics.test.util.TestResourceConstants.TEST_FILEPATH;
 import static org.junit.jupiter.api.Assertions.*;
 import static com.big.company.analytics.test.util.AssertThrows.assertThrows;
 
 class FileReaderServiceTests {
 
-    private static final String TEST_FILEPATH = "src/test/resources/";
     FileReaderService<Employee> fileReaderService;
 
     @BeforeEach

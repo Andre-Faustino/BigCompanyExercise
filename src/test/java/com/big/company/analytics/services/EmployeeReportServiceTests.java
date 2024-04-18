@@ -16,12 +16,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
+import static com.big.company.analytics.test.util.TestResourceConstants.TEST_FILENAME;
+import static com.big.company.analytics.test.util.TestResourceConstants.TEST_FILEPATH;
 import static org.junit.jupiter.api.Assertions.*;
 
 class EmployeeReportServiceTests {
 
-    private static final String TEST_FILEPATH = "src/test/resources/";
-    private static final String TEST_FILENAME = "SampleData.csv";
     List<Employee> employees;
     EmployeeNodeService nodeService;
     EmployeeReportService report;

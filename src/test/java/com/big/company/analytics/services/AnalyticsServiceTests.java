@@ -21,11 +21,11 @@ import java.util.stream.Stream;
 
 import static com.big.company.analytics.test.util.AssertThrows.assertThrows;
 
+import static com.big.company.analytics.test.util.TestResourceConstants.TEST_FILENAME;
+import static com.big.company.analytics.test.util.TestResourceConstants.TEST_FILEPATH;
 import static org.junit.jupiter.api.Assertions.*;
 
 class AnalyticsServiceTests {
-
-    private static final String TEST_FILEPATH = "src/test/resources/";
 
     private FileReaderService<Employee> fileReaderService;
     private EmployeeNodeService nodeService;
@@ -61,7 +61,7 @@ class AnalyticsServiceTests {
 
     @Test
     void shouldAnalyticsManagerWithSpecificFileSuccessfullyOverwritesFileSystemProperty() {
-        System.setProperty("file", TEST_FILEPATH + "SampleData.csv");
+        System.setProperty("file", TEST_FILEPATH + TEST_FILENAME);
         File specificFile = new File("specificFile.csv");
         AnalyticsManager analyticsManagerWithSpecificFile = new AnalyticsManager(fileReaderService, nodeService, reportService, specificFile);
 

@@ -12,12 +12,12 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 
 import static com.big.company.analytics.test.util.AssertThrows.assertThrows;
+import static com.big.company.analytics.test.util.TestResourceConstants.TEST_FILENAME;
+import static com.big.company.analytics.test.util.TestResourceConstants.TEST_FILEPATH;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class EmployeeNodeServiceTests {
 
-    private static final String TEST_FILEPATH = "src/test/resources/";
-    private static final String TEST_FILENAME = "SampleData.csv";
     List<Employee> employees;
 
     @BeforeEach
