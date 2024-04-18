@@ -4,7 +4,9 @@ import com.big.company.analytics.domain.Employee;
 import com.big.company.analytics.domain.EmployeeNode;
 import com.big.company.analytics.services.EmployeeReportService;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**

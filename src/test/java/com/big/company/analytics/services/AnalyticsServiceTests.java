@@ -1,6 +1,5 @@
 package com.big.company.analytics.services;
 
-import com.big.company.analytics.MainApplication;
 import com.big.company.analytics.domain.Employee;
 import com.big.company.analytics.exception.FileReaderException;
 import com.big.company.analytics.exception.ParseExtractionException;
@@ -20,10 +19,9 @@ import java.util.List;
 import java.util.stream.Stream;
 
 import static com.big.company.analytics.test.util.AssertThrows.assertThrows;
-
 import static com.big.company.analytics.test.util.TestResourceConstants.TEST_FILENAME;
 import static com.big.company.analytics.test.util.TestResourceConstants.TEST_FILEPATH;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 class AnalyticsServiceTests {
 
