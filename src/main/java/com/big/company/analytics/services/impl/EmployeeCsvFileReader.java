@@ -1,7 +1,7 @@
 package com.big.company.analytics.services.impl;
 
 import com.big.company.analytics.domain.Employee;
-import com.big.company.analytics.exception.FileExtractionException;
+import com.big.company.analytics.exception.FileReaderException;
 import com.big.company.analytics.exception.ParseExtractionException;
 import com.big.company.analytics.services.FileReaderService;
 
@@ -55,7 +55,7 @@ public final class EmployeeCsvFileReader implements FileReaderService<Employee> 
      * @param path     the path to the directory containing the CSV file
      * @param fileName the name of the CSV file
      * @return a list of {@code Employee} objects read from the CSV file
-     * @throws FileExtractionException  if the file is not found or cannot be loaded
+     * @throws FileReaderException  if the file is not found or cannot be loaded
      * @throws ParseExtractionException if any error occurs during parsing of the file content
      * @throws NullPointerException     if any params is null
      */
@@ -64,7 +64,7 @@ public final class EmployeeCsvFileReader implements FileReaderService<Employee> 
         Objects.requireNonNull(path, "Path should not be null");
         Objects.requireNonNull(fileName, "File name should not be null");
         if (path.isBlank() || fileName.isBlank())
-            throw new FileExtractionException("Path and filename should not be blank");
+            throw new FileReaderException("Path and filename should not be blank");
 
         return readFile(loadFile(path, fileName));
     }
@@ -74,7 +74,7 @@ public final class EmployeeCsvFileReader implements FileReaderService<Employee> 
      *
      * @param file the CSV file object from which {@code Employee} objects will be read
      * @return a list of {@code Employee} objects read from the CSV file
-     * @throws FileExtractionException  if the file is not found or cannot be loaded
+     * @throws FileReaderException  if the file is not found or cannot be loaded
      * @throws ParseExtractionException if any error occurs during parsing of the file content
      * @throws NullPointerException     if any params is null
      */
@@ -107,13 +107,13 @@ public final class EmployeeCsvFileReader implements FileReaderService<Employee> 
                 curLine++;
             }
         } catch (FileNotFoundException e) {
-            throw new FileExtractionException(
+            throw new FileReaderException(
                     String.format("File not found | Filepath: %s | Filename: %s", Optional.ofNullable(file.getParent()).orElse("/"), file.getName()));
         } catch (SecurityException e) {
-            throw new FileExtractionException(
+            throw new FileReaderException(
                     String.format("File reading not permitted | Filepath: %s | Filename: %s", Optional.ofNullable(file.getParent()).orElse("/"), file.getName()));
         } catch (IOException e) {
-            throw new FileExtractionException("Error when reading the file");
+            throw new FileReaderException("Error when reading the file");
         }
         return employees;
     }

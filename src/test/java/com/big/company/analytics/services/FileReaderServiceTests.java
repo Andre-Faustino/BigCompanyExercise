@@ -1,7 +1,7 @@
 package com.big.company.analytics.services;
 
 import com.big.company.analytics.domain.Employee;
-import com.big.company.analytics.exception.FileExtractionException;
+import com.big.company.analytics.exception.FileReaderException;
 import com.big.company.analytics.exception.ParseExtractionException;
 import com.big.company.analytics.services.impl.EmployeeCsvFileReader;
 import org.junit.jupiter.api.BeforeEach;
@@ -35,13 +35,13 @@ class FileReaderServiceTests {
         assertThrows("File name should not be null", NullPointerException.class,
                 () -> fileReaderService.readFile("valid/path", null));
 
-        assertThrows("Path and filename should not be blank", FileExtractionException.class,
+        assertThrows("Path and filename should not be blank", FileReaderException.class,
                 () -> fileReaderService.readFile("", ""));
     }
 
     @Test
     void shouldFailWhenFileNotExistParameters() {
-        assertThrows("File not found | Filepath: this\\path\\not\\exist | Filename: NoFile", FileExtractionException.class,
+        assertThrows("File not found | Filepath: this\\path\\not\\exist | Filename: NoFile", FileReaderException.class,
                 () -> fileReaderService.readFile("this/path/not/exist", "NoFile"));
     }
 
